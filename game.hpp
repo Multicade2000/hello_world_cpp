@@ -22,6 +22,8 @@ public:
 
     VAGsound snd;
 
+    int control_sync;
+
     // bool failed = false;
 
     void GameInit();

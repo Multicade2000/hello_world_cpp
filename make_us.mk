@@ -19,7 +19,6 @@ CPPFLAGS += -I../third_party/common
 CPPFLAGS += -I../third_party/psyq/include
 CPPFLAGS += -fno-exceptions -fno-rtti
 CPPFLAGS += -fno-builtin-memcpy
-CPPFLAGS += -fno-builtin-strcpy
 LDFLAGS += -L../third_party/psyq/lib
 LDFLAGS += -Wl,--start-group
 LDFLAGS += -lapi

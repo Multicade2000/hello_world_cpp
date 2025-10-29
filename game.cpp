@@ -2,18 +2,17 @@
 
 GameEngine::GameEngine()
 {
-    // region = GameRegion();
-    // graph = GameGraph();
-    // cdrom = GameCDROM();
-    // sound = GameSound();
-    // controller = GameController();
-    // player = Player();
-    // memcard = GameSave();
+    region = GameRegion();
+    graph = GameGraph();
+    cdrom = GameCDROM();
+    sound = GameSound();
+    controller = GameController();
+    player = Player();
+    memcard = GameSave();
 }
 
 GameEngine::~GameEngine()
 {
-    
 }
 
 void GameEngine::GameInit()
@@ -68,7 +67,7 @@ void GameEngine::GameLoop()
     // }
 
     graph.CleanOT();
-    graph.nextpri += *player.DrawSprite(graph.ot[graph.db],graph.nextpri);
+    graph.nextpri += *player.DrawSprite(graph.ot[graph.db], graph.nextpri);
 
     u_short btn, btn_hold;
 
@@ -76,8 +75,9 @@ void GameEngine::GameLoop()
     {
         if (controller.CheckType(0x00) == 0x4)
         {
-            btn = controller.CheckHold(0x00,1);
-            btn_hold = controller.CheckHold(0x00,0);
+            btn = controller.CheckHold(0x00, 1);
+            btn_hold = controller.CheckHold(0x00, 0);
+
             if (btn_hold & PAD_UP)
             {
                 player.y -= 4;
@@ -97,19 +97,19 @@ void GameEngine::GameLoop()
 
             if (btn & PAD_R1)
             {
-                controller.StartVibrator(0x00,1,0);
+                controller.StartVibrator(0x00, 1, 0);
             }
             if (btn & PAD_R2)
             {
-                controller.StartVibrator(0x00,0,0);
+                controller.StartVibrator(0x00, 0, 0);
             }
             if (btn & PAD_L1)
             {
-                controller.StartVibrator(0x00,0,1);
+                controller.StartVibrator(0x00, 0, 1);
             }
             if (btn & PAD_L2)
             {
-                controller.StartVibrator(0x00,0,0);
+                controller.StartVibrator(0x00, 0, 0);
             }
 
             if (btn & PAD_CROSS)
@@ -117,42 +117,45 @@ void GameEngine::GameLoop()
                 sound.PlaySFX(&snd);
             }
 
-            if (btn & PAD_SELECT)
+            if (btn & PAD_SELECT) //The real culprit behind the auto-save bug!
             {
-                memcard.MemCard_Save(player.x, player.y, region.REGION_CODE);
+                if (player.x != 48 && player.y != 48)
+                {
+                    memcard.MemCard_Save(player.x, player.y);
+                }
             }
 
             if (btn & PAD_START)
             {
-                SAVEDATA data = memcard.MemCard_Load(region.REGION_CODE);
+                SAVEDATA data = memcard.MemCard_Load();
                 player.x = data.data[0];
                 player.y = data.data[1];
             }
         }
         else if (controller.CheckType(0x00) == 0x7)
         {
-            btn = controller.CheckHold(0x00,1);
-            btn_hold = controller.CheckHold(0x00,0);
-            int rs_x = (int)controller.CheckStick(0x00,0)-127;
-            int rs_y = (int)controller.CheckStick(0x00,1)-127;
-            int ls_x = (int)controller.CheckStick(0x00,2)-127;
-            int ls_y = (int)controller.CheckStick(0x00,3)-127;
+            btn = controller.CheckHold(0x00, 1);
+            btn_hold = controller.CheckHold(0x00, 0);
+            int rs_x = (int)controller.CheckStick(0x00, 0) - 127;
+            int rs_y = (int)controller.CheckStick(0x00, 1) - 127;
+            int ls_x = (int)controller.CheckStick(0x00, 2) - 127;
+            int ls_y = (int)controller.CheckStick(0x00, 3) - 127;
 
             if (ls_y < -15)
             {
-                player.y -= -(ls_y/15);
+                player.y -= -(ls_y / 15);
             }
             if (ls_y > 15)
             {
-                player.y += ls_y/15;
+                player.y += ls_y / 15;
             }
             if (ls_x < -15)
             {
-                player.x -= -(ls_x/15);
+                player.x -= -(ls_x / 15);
             }
             if (ls_x > 15)
             {
-                player.x += ls_x/15;
+                player.x += ls_x / 15;
             }
 
             if ((btn_hold & PAD_UP) && (ls_x >= -15 && ls_x <= 15) && (ls_y >= -15 && ls_y <= 15))
@@ -174,19 +177,19 @@ void GameEngine::GameLoop()
 
             if (btn & PAD_R1)
             {
-                controller.StartVibrator(0x00,1,0);
+                controller.StartVibrator(0x00, 1, 0);
             }
             if (btn & PAD_R2)
             {
-                controller.StartVibrator(0x00,0,0);
+                controller.StartVibrator(0x00, 0, 0);
             }
             if (btn & PAD_L1)
             {
-                controller.StartVibrator(0x00,0,255);
+                controller.StartVibrator(0x00, 0, 255);
             }
             if (btn & PAD_L2)
             {
-                controller.StartVibrator(0x00,0,0);
+                controller.StartVibrator(0x00, 0, 0);
             }
 
             if (btn & PAD_CROSS)
@@ -194,14 +197,17 @@ void GameEngine::GameLoop()
                 sound.PlaySFX(&snd);
             }
 
-            if (btn & PAD_SELECT)
+            if (btn & PAD_SELECT) //The real culprit behind the auto-save bug!
             {
-                memcard.MemCard_Save(player.x, player.y, region.REGION_CODE);
+                if (player.x != 48 && player.y != 48)
+                {
+                    memcard.MemCard_Save(player.x, player.y);
+                }
             }
 
             if (btn & PAD_START)
             {
-                SAVEDATA data = memcard.MemCard_Load(region.REGION_CODE);
+                SAVEDATA data = memcard.MemCard_Load();
                 player.x = data.data[0];
                 player.y = data.data[1];
             }
@@ -212,18 +218,18 @@ void GameEngine::GameLoop()
     {
         player.x = 0;
     }
-    else if (player.x > graph.ResW-64)
+    else if (player.x > graph.ResW - 64)
     {
-        player.x = graph.ResW-64;
+        player.x = graph.ResW - 64;
     }
 
     if (player.y < 0)
     {
         player.y = 0;
     }
-    else if (player.y > graph.ResH-64)
+    else if (player.y > graph.ResH - 64)
     {
-        player.y = graph.ResH-64;
+        player.y = graph.ResH - 64;
     }
 
     graph.GraphDisp();

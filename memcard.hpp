@@ -11,9 +11,7 @@
 #include <libpad.h>
 #include <libmcrd.h>
 
-#define SAVENAME_EU "BEHELOCPP"
-#define SAVENAME_US "BAHELOCPP"
-#define SAVENAME_JP "BIHELOCPP"
+#define SAVENAME "HELOCPP"
 
 typedef struct {
     char id[2];        // Always 'SC'
@@ -25,7 +23,7 @@ typedef struct {
 } SAVEHDR;
 
 typedef struct {
-    int data[32]; //Because int is 4 bytes long, 32 * 4 = 128 total bytes!
+    int data[32];
 } SAVEDATA;
 
 class GameSave
@@ -43,6 +41,6 @@ public:
 
     void MemCard_Init();
     void PrepareHeader(u_long *icon);
-    void MemCard_Save(int plr_x, int plr_y, int region);
-    SAVEDATA MemCard_Load(int region);
+    void MemCard_Save(int plr_x, int plr_y);
+    SAVEDATA MemCard_Load();
 };

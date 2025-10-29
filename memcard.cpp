@@ -12,7 +12,7 @@ GameSave::~GameSave()
 
 void GameSave::MemCard_Init()
 {
-    MemCardInit(1);
+    MemCardInit(0);
     MemCardStart();
 }
 
@@ -38,34 +38,19 @@ void GameSave::PrepareHeader(u_long *icon_data)
     __builtin_memcpy(mem_header.clut, icon->caddr, 32);
 }
 
-void GameSave::MemCard_Save(int plr_x, int plr_y, int region)
+void GameSave::MemCard_Save(int plr_x, int plr_y)
 {
-    const char* save_name = "__HELLOCPP";
-
-    if (region == 0)
-    {
-        __builtin_strcpy((char*)save_name,SAVENAME_EU);
-    }
-    else if (region == 1)
-    {
-        __builtin_strcpy((char*)save_name,SAVENAME_US);
-    }
-    else if (region == 2)
-    {
-        __builtin_strcpy((char*)save_name,SAVENAME_JP);
-    }
-
     SAVEDATA dump_data;
 
     dump_data.data[0] = plr_x;
     dump_data.data[1] = plr_y;
 
     MemCardExist(0);
-    MemCardSync(0, &cardCmd, &slotResult[0]);
+    while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
     
     if ((slotResult[0] == McErrNone) || (slotResult[0] == McErrNewCard)) {
         MemCardAccept(0);
-        MemCardSync(0, &cardCmd, &slotResult[0]);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
     }
     else if ((slotResult[0] == McErrNotFormat)) {
         MemCardFormat(0);
@@ -75,65 +60,52 @@ void GameSave::MemCard_Save(int plr_x, int plr_y, int region)
         return;
     }
 
-    if (MemCardOpen(0, (char *)save_name, O_WRONLY) == McErrFileNotExist) {
+    if (MemCardOpen(0, SAVENAME, O_WRONLY) == McErrFileNotExist) {
         
-        if (MemCardCreateFile(0, (char *)save_name, 1) == 0x07) {
+        if (MemCardCreateFile(0, SAVENAME, 1) == 0x07) {
             return;
         }
-        MemCardOpen(0, (char *)save_name, O_WRONLY);
+        MemCardOpen(0, SAVENAME, O_WRONLY);
     }
 
     MemCardWriteData((u_long*)&mem_header, 128*0, 128);
-    MemCardSync(0, &cardCmd, &slotResult[0]);
+    while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
     
     MemCardWriteData((u_long*)icon->paddr, 128*1, 128);
-    MemCardSync(0, &cardCmd, &slotResult[0]);
+    while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
     
     MemCardWriteData((u_long*)&dump_data, 128*2, 128);
-    MemCardSync(0, &cardCmd, &slotResult[0]);
+    while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
     
     MemCardClose();
 }
 
-SAVEDATA GameSave::MemCard_Load(int region)
+SAVEDATA GameSave::MemCard_Load()
 {
-    const char* save_name = "__HELLOCPP";
-
-    if (region == 0)
-    {
-        __builtin_strcpy((char*)save_name,SAVENAME_EU);
-    }
-    else if (region == 1)
-    {
-        __builtin_strcpy((char*)save_name,SAVENAME_US);
-    }
-    else if (region == 2)
-    {
-        __builtin_strcpy((char*)save_name,SAVENAME_JP);
-    }
+    const char* save_name = SAVENAME;
 
     SAVEDATA dump_data;
     dump_data.data[0] = 48;
     dump_data.data[1] = 48;
 
     MemCardExist(0);
-    MemCardSync(0, &cardCmd, &slotResult[0]);
+    while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
     
     if ((slotResult[0] == McErrNone) || (slotResult[0] == McErrNewCard)) {
         MemCardAccept(0);
-        MemCardSync(0, &cardCmd, &slotResult[0]);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
     }
     else
     {
         return dump_data;
     }
     
-    if (MemCardOpen(0, (char *)save_name, O_RDONLY) == McErrFileNotExist) {
+    if (MemCardOpen(0, SAVENAME, O_RDONLY) == McErrFileNotExist) {
         return dump_data;
     }
     
     MemCardReadData((u_long*)&dump_data, 128*2, 128);
-    MemCardSync(0, &cardCmd, &slotResult[0]);
+    while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
     
     MemCardClose();
 
