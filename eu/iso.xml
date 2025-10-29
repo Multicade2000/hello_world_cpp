@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<iso_project image_name="eu/hello_world_cpp_eu.bin" cue_sheet="eu/hello_world_cpp_eu.cue">
+    <track type="data">
+        <identifiers
+            system            ="PLAYSTATION"
+            application        ="PLAYSTATION"
+            volume            ="HELOCPP"
+            volume_set        ="HELOCPP"
+            publisher        ="HEROIC"
+            data_preparer    ="MKPSXISO"
+        />
+        <license file="licensee.dat"/>
+        <directory_tree>
+            <file name="system.cnf"    type="data"    source="../system.txt"/>
+            <file name="MAIN.EXE"    type="data"    source="HelloWorldCpp.ps-exe"/>
+            <file name="MAIN.TIM"    type="data"    source="../data/main.tim"/>
+            <dir name="DATA">
+                <dir name="SPRT">
+                    <file name="BIRD.TIM"    type="data"    source="../data/sprt/bird.tim"/>
+                </dir>
+                <dir name="SND">
+                    <file name="JUMP.VAG"    type="data"    source="../data/snd/jump.vag"/>
+                </dir>
+            </dir>
+            <dummy sectors="1024"/>
+        </directory_tree>
+    </track>
+</iso_project>

@@ -1,0 +1,3 @@
+FILE "hello_world_cpp_eu.bin" BINARY
+  TRACK 01 MODE2/2352
+    INDEX 01 00:00:00
