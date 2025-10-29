@@ -7,7 +7,7 @@ Running at 512x480 resolution is fantastic indedd!
 # Don't forget the sound system!
 It can play sound effects in any pitch!
 
-#Behold, the CDRead() feature!
+# Behold, the CDRead() feature!
 Reading stuff from CD instead of EXE is better way to improve your future games!
 
 # Feel the controllers!
