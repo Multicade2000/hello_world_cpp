@@ -38,8 +38,23 @@ void GameSave::PrepareHeader(u_long *icon_data)
     __builtin_memcpy(mem_header.clut, icon->caddr, 32);
 }
 
-void GameSave::MemCard_Save(int plr_x, int plr_y)
+void GameSave::MemCard_Save(int plr_x, int plr_y, int region)
 {
+    const char *save_name = "__MAIN-EXE00HELOCPP0";
+
+    if (region == 0)
+    {
+        __builtin_strcpy((char *)save_name, SAVENAME_EU);
+    }
+    else if (region == 1)
+    {
+        __builtin_strcpy((char *)save_name, SAVENAME_US);
+    }
+    else if (region == 2)
+    {
+        __builtin_strcpy((char *)save_name, SAVENAME_JP);
+    }
+
     SAVEDATA dump_data;
 
     dump_data.data[0] = plr_x;
@@ -60,12 +75,12 @@ void GameSave::MemCard_Save(int plr_x, int plr_y)
         return;
     }
 
-    if (MemCardOpen(0, SAVENAME, O_WRONLY) == McErrFileNotExist) {
+    if (MemCardOpen(0, (char *)save_name, O_WRONLY) == McErrFileNotExist) {
         
-        if (MemCardCreateFile(0, SAVENAME, 1) == 0x07) {
+        if (MemCardCreateFile(0, (char *)save_name, 1) == 0x07) {
             return;
         }
-        MemCardOpen(0, SAVENAME, O_WRONLY);
+        MemCardOpen(0, (char *)save_name, O_WRONLY);
     }
 
     MemCardWriteData((u_long*)&mem_header, 128*0, 128);
@@ -80,9 +95,22 @@ void GameSave::MemCard_Save(int plr_x, int plr_y)
     MemCardClose();
 }
 
-SAVEDATA GameSave::MemCard_Load()
+SAVEDATA GameSave::MemCard_Load(int region)
 {
-    const char* save_name = SAVENAME;
+    char *save_name = "__MAIN-EXE00HELOCPP0";
+
+    if (region == 0)
+    {
+        __builtin_strcpy((char *)save_name, SAVENAME_EU);
+    }
+    else if (region == 1)
+    {
+        __builtin_strcpy((char *)save_name, SAVENAME_US);
+    }
+    else if (region == 2)
+    {
+        __builtin_strcpy((char *)save_name, SAVENAME_JP);
+    }
 
     SAVEDATA dump_data;
     dump_data.data[0] = 48;
@@ -100,7 +128,7 @@ SAVEDATA GameSave::MemCard_Load()
         return dump_data;
     }
     
-    if (MemCardOpen(0, SAVENAME, O_RDONLY) == McErrFileNotExist) {
+    if (MemCardOpen(0, (char *)save_name, O_RDONLY) == McErrFileNotExist) {
         return dump_data;
     }
     

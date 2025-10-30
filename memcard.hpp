@@ -11,7 +11,9 @@
 #include <libpad.h>
 #include <libmcrd.h>
 
-#define SAVENAME "HELOCPP"
+#define SAVENAME_EU "BEMAIN-EXE00HELOCPP0"
+#define SAVENAME_US "BAMAIN-EXE00HELOCPP0"
+#define SAVENAME_JP "BIMAIN-EXE00HELOCPP0"
 
 typedef struct {
     char id[2];        // Always 'SC'
@@ -34,6 +36,7 @@ public:
 
     long cardCmd;
     long slotResult[1];
+    const char *save_name;
 
     SAVEHDR mem_header;
 
@@ -41,6 +44,6 @@ public:
 
     void MemCard_Init();
     void PrepareHeader(u_long *icon);
-    void MemCard_Save(int plr_x, int plr_y);
-    SAVEDATA MemCard_Load();
+    void MemCard_Save(int plr_x, int plr_y, int region);
+    SAVEDATA MemCard_Load(int region);
 };

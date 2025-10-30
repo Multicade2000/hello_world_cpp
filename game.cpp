@@ -102,7 +102,7 @@ void GameEngine::GameLoop()
 
             if (btn & PAD_START)
             {
-                SAVEDATA data = memcard.MemCard_Load();
+                SAVEDATA data = memcard.MemCard_Load(region.REGION_CODE);
                 player.x = data.data[0];
                 player.y = data.data[1];
             }
@@ -111,7 +111,7 @@ void GameEngine::GameLoop()
             {
                 if (player.x != 48 && player.y != 48)
                 {
-                    memcard.MemCard_Save(player.x, player.y);
+                    memcard.MemCard_Save(player.x, player.y,region.REGION_CODE);
                 }
             }
 
@@ -165,7 +165,7 @@ void GameEngine::GameLoop()
 
             if (btn & PAD_START)
             {
-                SAVEDATA data = memcard.MemCard_Load();
+                SAVEDATA data = memcard.MemCard_Load(region.REGION_CODE);
                 player.x = data.data[0];
                 player.y = data.data[1];
             }
@@ -174,7 +174,7 @@ void GameEngine::GameLoop()
             {
                 if (player.x != 48 && player.y != 48)
                 {
-                    memcard.MemCard_Save(player.x, player.y);
+                    memcard.MemCard_Save(player.x, player.y,region.REGION_CODE);
                 }
             }
 
