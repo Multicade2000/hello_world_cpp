@@ -13,8 +13,8 @@
         <license file="licensej.dat"/>
         <directory_tree>
             <file name="system.cnf"    type="data"    source="../system.txt"/>
-            <file name="MAIN.EXE"    type="data"    source="HelloWorldCpp.ps-exe"/>
-            <file name="MAIN.TIM"    type="data"    source="../data/main.tim"/>
+            <file name="MAIN-EXE.00"    type="data"    source="HelloWorldCpp.ps-exe"/>
+            <file name="ICON.TIM"    type="data"    source="../data/main.tim"/>
             <dir name="DATA">
                 <dir name="SPRT">
                     <file name="BIRD.TIM"    type="data"    source="../data/sprt/bird.tim"/>

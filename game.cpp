@@ -8,11 +8,13 @@ GameEngine::GameEngine()
     sound = GameSound();
     controller = GameController();
     player = Player();
+    player2 = Player();
     memcard = GameSave();
 }
 
 GameEngine::~GameEngine()
 {
+    
 }
 
 void GameEngine::GameInit()
@@ -49,13 +51,15 @@ void GameEngine::GameLoadStuff()
         free(file[1]);
     }
 
-    if ((file[2] = cdrom.CDROM_ReadFile("\\MAIN.TIM;1")))
+    if ((file[2] = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
     {
         memcard.PrepareHeader(file[2]);
         free(file[2]);
     }
 
     cdrom.CDROM_Standby();
+
+    
 }
 
 void GameEngine::GameLoop()
@@ -67,116 +71,114 @@ void GameEngine::GameLoop()
     // }
 
     graph.CleanOT();
-    graph.nextpri += *player.DrawSprite(graph.ot[graph.db], graph.nextpri);
 
-    u_short btn, btn_hold;
+    controller.LoopVibrator(0x00);
+    controller.LoopVibrator(0x10);
 
     if (controller.IsConnected(0x00))
     {
         if (controller.CheckType(0x00) == 0x4)
         {
-            btn = controller.CheckHold(0x00, 1);
-            btn_hold = controller.CheckHold(0x00, 0);
+            graph.nextpri = player.DrawSprite(graph.ot[graph.db], graph.nextpri);
 
-            if (btn & PAD_R1)
-            {
-                controller.StartVibrator(0x00, 1, 0);
-            }
-            if (btn & PAD_R2)
-            {
-                controller.StartVibrator(0x00, 0, 0);
-            }
-            if (btn & PAD_L1)
-            {
-                controller.StartVibrator(0x00, 0, 1);
-            }
-            if (btn & PAD_L2)
-            {
-                controller.StartVibrator(0x00, 0, 0);
-            }
+            u_short btn = controller.CheckButton(0x00);
 
-            if (btn & PAD_CROSS)
-            {
-                sound.PlaySFX(&snd);
-            }
-
-            if (btn & PAD_START)
-            {
-                SAVEDATA data = memcard.MemCard_Load(region.REGION_CODE);
-                player.x = data.data[0];
-                player.y = data.data[1];
-            }
-
-            if (btn & PAD_SELECT) //The real culprit behind the auto-save bug!
-            {
-                if (player.x != 48 && player.y != 48)
-                {
-                    memcard.MemCard_Save(player.x, player.y,region.REGION_CODE);
-                }
-            }
-
-            if (btn_hold & PAD_UP)
+            if (!(btn & PAD_UP))
             {
                 player.y -= 4;
             }
-            else if (btn_hold & PAD_DOWN)
+            else if (!(btn & PAD_DOWN))
             {
                 player.y += 4;
             }
-            if (btn_hold & PAD_LEFT)
+            if (!(btn & PAD_LEFT))
             {
                 player.x -= 4;
             }
-            else if (btn_hold & PAD_RIGHT)
+            else if (!(btn & PAD_RIGHT))
             {
                 player.x += 4;
+            }
+
+            if (!(btn & PAD_R1))
+            {
+                if (!controller.vib_pressed[0])
+                {
+                    controller.motor[0][0] = 1;
+                    controller.motor[0][1] = 0;
+                    controller.vib_pressed[0] = true;
+                    controller.vib_sync[0] = true;
+                }
+            }
+            else if (!(btn & PAD_R2))
+            {
+                if (!controller.vib_pressed[0])
+                {
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 0;
+                    controller.vib_pressed[0] = true;
+                    controller.vib_sync[0] = true;
+                }
+            }
+            else if (!(btn & PAD_L1))
+            {
+                if (!controller.vib_pressed[0])
+                {
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 255;
+                    controller.vib_pressed[0] = true;
+                    controller.vib_sync[0] = true;
+                }
+            }
+            else if (!(btn & PAD_L2))
+            {
+                if (!controller.vib_pressed[0])
+                {
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 0;
+                    controller.vib_pressed[0] = true;
+                    controller.vib_sync[0] = true;
+                }
+            }
+            else
+            {
+                controller.vib_pressed[0] = false;
+            }
+
+            if (!(btn & PAD_CROSS))
+            {
+                if (!controller.cross_pressed[0])
+                {
+                    sound.PlaySFX(&snd);
+                    controller.cross_pressed[0] = true;
+                }
+            }
+            else
+            {
+                controller.cross_pressed[0] = false;
+            }
+
+            if (!(btn & PAD_SELECT))
+            {
+                memcard.MemCard_Save(0, player.x, player.y, region.REGION_CODE);
+            }
+
+            if (!(btn & PAD_START))
+            {
+                SAVEDATA data = memcard.MemCard_Load(0, region.REGION_CODE);
+                player.x = data.data[0];
+                player.y = data.data[1];
             }
         }
         else if (controller.CheckType(0x00) == 0x7)
         {
-            btn = controller.CheckHold(0x00, 1);
-            btn_hold = controller.CheckHold(0x00, 0);
+            graph.nextpri = player.DrawSprite(graph.ot[graph.db], graph.nextpri);
+
+            u_short btn = controller.CheckButton(0x00);
             int rs_x = (int)controller.CheckStick(0x00, 0) - 127;
             int rs_y = (int)controller.CheckStick(0x00, 1) - 127;
             int ls_x = (int)controller.CheckStick(0x00, 2) - 127;
             int ls_y = (int)controller.CheckStick(0x00, 3) - 127;
-
-            if (btn & PAD_R1)
-            {
-                controller.StartVibrator(0x00, 1, 0);
-            }
-            if (btn & PAD_R2)
-            {
-                controller.StartVibrator(0x00, 0, 0);
-            }
-            if (btn & PAD_L1)
-            {
-                controller.StartVibrator(0x00, 0, 255);
-            }
-            if (btn & PAD_L2)
-            {
-                controller.StartVibrator(0x00, 0, 0);
-            }
-
-            if (btn & PAD_CROSS)
-            {
-                sound.PlaySFX(&snd);
-            }
-
-            if (btn & PAD_START)
-            {
-                SAVEDATA data = memcard.MemCard_Load(region.REGION_CODE);
-                player.x = data.data[0];
-                player.y = data.data[1];
-            }
-
-            if (btn & PAD_SELECT) //The real culprit behind the auto-save bug!
-            {
-                if (player.x != 48 && player.y != 48)
-                {
-                    memcard.MemCard_Save(player.x, player.y,region.REGION_CODE);
-                }
-            }
 
             if (ls_y < -15)
             {
@@ -195,21 +197,301 @@ void GameEngine::GameLoop()
                 player.x += ls_x / 15;
             }
 
-            if ((btn_hold & PAD_UP) && (ls_x >= -15 && ls_x <= 15) && (ls_y >= -15 && ls_y <= 15))
+            if (!(btn & PAD_UP) && (ls_x >= -15 && ls_x <= 15) && (ls_y >= -15 && ls_y <= 15))
             {
                 player.y -= 4;
             }
-            else if ((btn_hold & PAD_DOWN) && (ls_x >= -15 && ls_x <= 15) && (ls_y >= -15 && ls_y <= 15))
+            else if (!(btn & PAD_DOWN) && (ls_x >= -15 && ls_x <= 15) && (ls_y >= -15 && ls_y <= 15))
             {
                 player.y += 4;
             }
-            if ((btn_hold & PAD_LEFT) && (ls_x >= -15 && ls_x <= 15) && (ls_y >= -15 && ls_y <= 15))
+            if (!(btn & PAD_LEFT) && (ls_x >= -15 && ls_x <= 15) && (ls_y >= -15 && ls_y <= 15))
             {
                 player.x -= 4;
             }
-            else if ((btn_hold & PAD_RIGHT) && (ls_x >= -15 && ls_x <= 15) && (ls_y >= -15 && ls_y <= 15))
+            else if (!(btn & PAD_RIGHT) && (ls_x >= -15 && ls_x <= 15) && (ls_y >= -15 && ls_y <= 15))
             {
                 player.x += 4;
+            }
+
+            if (!(btn & PAD_R1))
+            {
+                if (!controller.vib_pressed[0])
+                {
+                    controller.motor[0][0] = 1;
+                    controller.motor[0][1] = 0;
+                    controller.vib_pressed[0] = true;
+                    controller.vib_sync[0] = true;
+                }
+            }
+            else if (!(btn & PAD_R2))
+            {
+                if (!controller.vib_pressed[0])
+                {
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 0;
+                    controller.vib_pressed[0] = true;
+                    controller.vib_sync[0] = true;
+                }
+            }
+            else if (!(btn & PAD_L1))
+            {
+                if (!controller.vib_pressed[0])
+                {
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 255;
+                    controller.vib_pressed[0] = true;
+                    controller.vib_sync[0] = true;
+                }
+            }
+            else if (!(btn & PAD_L2))
+            {
+                if (!controller.vib_pressed[0])
+                {
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 0;
+                    controller.vib_pressed[0] = true;
+                    controller.vib_sync[0] = true;
+                }
+            }
+            else
+            {
+                controller.vib_pressed[0] = false;
+            }
+
+            if (!(btn & PAD_CROSS))
+            {
+                if (!controller.cross_pressed[0])
+                {
+                    sound.PlaySFX(&snd);
+                    controller.cross_pressed[0] = true;
+                }
+            }
+            else
+            {
+                controller.cross_pressed[0] = false;
+            }
+
+            if (!(btn & PAD_SELECT))
+            {
+                memcard.MemCard_Save(0, player.x, player.y, region.REGION_CODE);
+            }
+
+            if (!(btn & PAD_START))
+            {
+                SAVEDATA data = memcard.MemCard_Load(0, region.REGION_CODE);
+                player.x = data.data[0];
+                player.y = data.data[1];
+            }
+        }
+    }
+    if (controller.IsConnected(0x01))
+    {
+        if (controller.CheckType(0x01) == 0x4)
+        {
+            graph.nextpri = player2.DrawSprite(graph.ot[graph.db], graph.nextpri);
+
+            u_short btn2 = controller.CheckButton(0x01);
+
+            if (!(btn2 & PAD_UP))
+            {
+                player2.y -= 4;
+            }
+            else if (!(btn2 & PAD_DOWN))
+            {
+                player2.y += 4;
+            }
+            if (!(btn2 & PAD_LEFT))
+            {
+                player2.x -= 4;
+            }
+            else if (!(btn2 & PAD_RIGHT))
+            {
+                player2.x += 4;
+            }
+
+            if (!(btn2 & PAD_R1))
+            {
+                if (!controller.vib_pressed[1])
+                {
+                    controller.motor[1][0] = 1;
+                    controller.motor[1][1] = 0;
+                    controller.vib_pressed[1] = true;
+                    controller.vib_sync[1] = true;
+                }
+            }
+            else if (!(btn2 & PAD_R2))
+            {
+                if (!controller.vib_pressed[1])
+                {
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 0;
+                    controller.vib_pressed[1] = true;
+                    controller.vib_sync[1] = true;
+                }
+            }
+            else if (!(btn2 & PAD_L1))
+            {
+                if (!controller.vib_pressed[1])
+                {
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 255;
+                    controller.vib_pressed[1] = true;
+                    controller.vib_sync[1] = true;
+                }
+            }
+            else if (!(btn2 & PAD_L2))
+            {
+                if (!controller.vib_pressed[1])
+                {
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 0;
+                    controller.vib_pressed[1] = true;
+                    controller.vib_sync[1] = true;
+                }
+            }
+            else
+            {
+                controller.vib_pressed[1] = false;
+            }
+
+            if (!(btn2 & PAD_CROSS))
+            {
+                if (!controller.cross_pressed[1])
+                {
+                    sound.PlaySFX(&snd);
+                    controller.cross_pressed[1] = true;
+                }
+            }
+            else
+            {
+                controller.cross_pressed[1] = false;
+            }
+
+            if (!(btn2 & PAD_SELECT))
+            {
+                memcard.MemCard_Save(1, player2.x, player2.y, region.REGION_CODE);
+            }
+
+            if (!(btn2 & PAD_START))
+            {
+                SAVEDATA data = memcard.MemCard_Load(1, region.REGION_CODE);
+                player2.x = data.data[0];
+                player2.y = data.data[1];
+            }
+        }
+        else if (controller.CheckType(0x01) == 0x7)
+        {
+            graph.nextpri = player2.DrawSprite(graph.ot[graph.db], graph.nextpri);
+
+            u_short btn2 = controller.CheckButton(0x01);
+            int rs_x = (int)controller.CheckStick(0x01, 0) - 127;
+            int rs_y = (int)controller.CheckStick(0x01, 1) - 127;
+            int ls_x = (int)controller.CheckStick(0x01, 2) - 127;
+            int ls_y = (int)controller.CheckStick(0x01, 3) - 127;
+
+            if (ls_y < -15)
+            {
+                player2.y -= -(ls_y / 15);
+            }
+            if (ls_y > 15)
+            {
+                player2.y += ls_y / 15;
+            }
+            if (ls_x < -15)
+            {
+                player2.x -= -(ls_x / 15);
+            }
+            if (ls_x > 15)
+            {
+                player2.x += ls_x / 15;
+            }
+
+            if (!(btn2 & PAD_UP) && (ls_x >= -15 && ls_x <= 15) && (ls_y >= -15 && ls_y <= 15))
+            {
+                player2.y -= 4;
+            }
+            else if (!(btn2 & PAD_DOWN) && (ls_x >= -15 && ls_x <= 15) && (ls_y >= -15 && ls_y <= 15))
+            {
+                player2.y += 4;
+            }
+            if (!(btn2 & PAD_LEFT) && (ls_x >= -15 && ls_x <= 15) && (ls_y >= -15 && ls_y <= 15))
+            {
+                player2.x -= 4;
+            }
+            else if (!(btn2 & PAD_RIGHT) && (ls_x >= -15 && ls_x <= 15) && (ls_y >= -15 && ls_y <= 15))
+            {
+                player2.x += 4;
+            }
+
+            if (!(btn2 & PAD_R1))
+            {
+                if (!controller.vib_pressed[1])
+                {
+                    controller.motor[1][0] = 1;
+                    controller.motor[1][1] = 0;
+                    controller.vib_pressed[1] = true;
+                    controller.vib_sync[1] = true;
+                }
+            }
+            else if (!(btn2 & PAD_R2))
+            {
+                if (!controller.vib_pressed[1])
+                {
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 0;
+                    controller.vib_pressed[1] = true;
+                    controller.vib_sync[1] = true;
+                }
+            }
+            else if (!(btn2 & PAD_L1))
+            {
+                if (!controller.vib_pressed[1])
+                {
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 255;
+                    controller.vib_pressed[1] = true;
+                    controller.vib_sync[1] = true;
+                }
+            }
+            else if (!(btn2 & PAD_L2))
+            {
+                if (!controller.vib_pressed[1])
+                {
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 0;
+                    controller.vib_pressed[1] = true;
+                    controller.vib_sync[1] = true;
+                }
+            }
+            else
+            {
+                controller.vib_pressed[1] = false;
+            }
+
+            if (!(btn2 & PAD_CROSS))
+            {
+                if (!controller.cross_pressed[1])
+                {
+                    sound.PlaySFX(&snd);
+                    controller.cross_pressed[1] = true;
+                }
+            }
+            else
+            {
+                controller.cross_pressed[1] = false;
+            }
+
+            if (!(btn2 & PAD_SELECT))
+            {
+                memcard.MemCard_Save(1, player2.x, player2.y, region.REGION_CODE);
+            }
+
+            if (!(btn2 & PAD_START))
+            {
+                SAVEDATA data = memcard.MemCard_Load(1, region.REGION_CODE);
+                player2.x = data.data[0];
+                player2.y = data.data[1];
             }
         }
     }
@@ -230,6 +512,24 @@ void GameEngine::GameLoop()
     else if (player.y > graph.ResH - 64)
     {
         player.y = graph.ResH - 64;
+    }
+
+    if (player2.x < 0)
+    {
+        player2.x = 0;
+    }
+    else if (player2.x > graph.ResW - 64)
+    {
+        player2.x = graph.ResW - 64;
+    }
+
+    if (player2.y < 0)
+    {
+        player2.y = 0;
+    }
+    else if (player2.y > graph.ResH - 64)
+    {
+        player2.y = graph.ResH - 64;
     }
 
     graph.GraphDisp();

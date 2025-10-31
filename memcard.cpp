@@ -2,12 +2,10 @@
 
 GameSave::GameSave()
 {
-    
 }
 
 GameSave::~GameSave()
 {
-
 }
 
 void GameSave::MemCard_Init()
@@ -38,7 +36,7 @@ void GameSave::PrepareHeader(u_long *icon_data)
     __builtin_memcpy(mem_header.clut, icon->caddr, 32);
 }
 
-void GameSave::MemCard_Save(int plr_x, int plr_y, int region)
+void GameSave::MemCard_Save(int port, int plr_x, int plr_y, int region)
 {
     const char *save_name = "__MAIN-EXE00HELOCPP0";
 
@@ -60,44 +58,91 @@ void GameSave::MemCard_Save(int plr_x, int plr_y, int region)
     dump_data.data[0] = plr_x;
     dump_data.data[1] = plr_y;
 
-    MemCardExist(0);
-    while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
-    
-    if ((slotResult[0] == McErrNone) || (slotResult[0] == McErrNewCard)) {
-        MemCardAccept(0);
-        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
-    }
-    else if ((slotResult[0] == McErrNotFormat)) {
-        MemCardFormat(0);
-    }
-    else
+    if (port == 0)
     {
-        return;
-    }
+        MemCardExist(0x00);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
 
-    if (MemCardOpen(0, (char *)save_name, O_WRONLY) == McErrFileNotExist) {
-        
-        if (MemCardCreateFile(0, (char *)save_name, 1) == 0x07) {
+        if ((slotResult[0] == McErrNone) || (slotResult[0] == McErrNewCard))
+        {
+            MemCardAccept(0x00);
+            while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+        }
+        else if ((slotResult[0] == McErrNotFormat))
+        {
+            MemCardFormat(0x00);
+        }
+        else
+        {
             return;
         }
-        MemCardOpen(0, (char *)save_name, O_WRONLY);
-    }
 
-    MemCardWriteData((u_long*)&mem_header, 128*0, 128);
-    while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
-    
-    MemCardWriteData((u_long*)icon->paddr, 128*1, 128);
-    while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
-    
-    MemCardWriteData((u_long*)&dump_data, 128*2, 128);
-    while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
-    
-    MemCardClose();
+        if (MemCardOpen(0x00, (char *)save_name, O_WRONLY) == McErrFileNotExist)
+        {
+
+            if (MemCardCreateFile(0x00, (char *)save_name, 1) == 0x07)
+            {
+                return;
+            }
+            MemCardOpen(0x00, (char *)save_name, O_WRONLY);
+        }
+
+        MemCardWriteData((u_long *)&mem_header, 128 * 0, 128);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+
+        MemCardWriteData((u_long *)icon->paddr, 128 * 1, 128);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+
+        MemCardWriteData((u_long *)&dump_data, 128 * 2, 128);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+
+        MemCardClose();
+    }
+    else if (port == 1)
+    {
+        MemCardExist(0x10);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+
+        if ((slotResult[0] == McErrNone) || (slotResult[0] == McErrNewCard))
+        {
+            MemCardAccept(0x10);
+            while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+        }
+        else if ((slotResult[0] == McErrNotFormat))
+        {
+            MemCardFormat(0x10);
+        }
+        else
+        {
+            return;
+        }
+
+        if (MemCardOpen(0x10, (char *)save_name, O_WRONLY) == McErrFileNotExist)
+        {
+
+            if (MemCardCreateFile(0x10, (char *)save_name, 1) == 0x07)
+            {
+                return;
+            }
+            MemCardOpen(0x10, (char *)save_name, O_WRONLY);
+        }
+
+        MemCardWriteData((u_long *)&mem_header, 128 * 0, 128);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+
+        MemCardWriteData((u_long *)icon->paddr, 128 * 1, 128);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+
+        MemCardWriteData((u_long *)&dump_data, 128 * 2, 128);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+
+        MemCardClose();
+    }
 }
 
-SAVEDATA GameSave::MemCard_Load(int region)
+SAVEDATA GameSave::MemCard_Load(int port, int region)
 {
-    char *save_name = "__MAIN-EXE00HELOCPP0";
+    const char *save_name = "__MAIN-EXE00HELOCPP0";
 
     if (region == 0)
     {
@@ -116,26 +161,56 @@ SAVEDATA GameSave::MemCard_Load(int region)
     dump_data.data[0] = 48;
     dump_data.data[1] = 48;
 
-    MemCardExist(0);
-    while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
-    
-    if ((slotResult[0] == McErrNone) || (slotResult[0] == McErrNewCard)) {
-        MemCardAccept(0);
-        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
-    }
-    else
+    if (port == 0)
     {
-        return dump_data;
+        MemCardExist(0x00);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+
+        if ((slotResult[0] == McErrNone) || (slotResult[0] == McErrNewCard))
+        {
+            MemCardAccept(0x00);
+            while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+        }
+        else
+        {
+            return dump_data;
+        }
+
+        if (MemCardOpen(0x00, (char *)save_name, O_RDONLY) == McErrFileNotExist)
+        {
+            return dump_data;
+        }
+
+        MemCardReadData((u_long *)&dump_data, 128 * 2, 128);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+
+        MemCardClose();
     }
-    
-    if (MemCardOpen(0, (char *)save_name, O_RDONLY) == McErrFileNotExist) {
-        return dump_data;
+    else if (port == 1)
+    {
+        MemCardExist(0x10);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+
+        if ((slotResult[0] == McErrNone) || (slotResult[0] == McErrNewCard))
+        {
+            MemCardAccept(0x10);
+            while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+        }
+        else
+        {
+            return dump_data;
+        }
+
+        if (MemCardOpen(0x10, (char *)save_name, O_RDONLY) == McErrFileNotExist)
+        {
+            return dump_data;
+        }
+
+        MemCardReadData((u_long *)&dump_data, 128 * 2, 128);
+        while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
+
+        MemCardClose();
     }
-    
-    MemCardReadData((u_long*)&dump_data, 128*2, 128);
-    while (MemCardSync(1, &cardCmd, &slotResult[0]) == 0);
-    
-    MemCardClose();
 
     return dump_data;
 }

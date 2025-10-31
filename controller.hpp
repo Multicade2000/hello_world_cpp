@@ -26,18 +26,23 @@ class GameController
 public:
     u_char padbuff[2][34];
     u_char align[6];
-    u_char motor[2];
+    u_char motor[2][2];
     u_short a, b, pad;
 
     GameController();
     ~GameController();
+
+    bool cross_pressed[2];
+    bool vib_pressed[2];
+    bool save_pressed[2];
+
+    bool vib_sync[2];
 
     void ControllerInit();
     int IsConnected(int port);
     u_char CheckType(int port);
     u_short CheckButton(int port);
     u_char CheckStick(int port, int stick);
-    u_short CheckHold(int port, int press);
 
-    void StartVibrator(int port, u_char motor1, u_char motor2);
+    void LoopVibrator(int port);
 };

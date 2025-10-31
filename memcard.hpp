@@ -44,6 +44,6 @@ public:
 
     void MemCard_Init();
     void PrepareHeader(u_long *icon);
-    void MemCard_Save(int plr_x, int plr_y, int region);
-    SAVEDATA MemCard_Load(int region);
+    void MemCard_Save(int port, int plr_x, int plr_y, int region);
+    SAVEDATA MemCard_Load(int port, int region);
 };

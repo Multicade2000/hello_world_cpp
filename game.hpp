@@ -18,11 +18,10 @@ public:
     GameCDROM cdrom;
     GameController controller;
     Player player;
+    Player player2;
     GameSave memcard;
 
     VAGsound snd;
-
-    int control_sync;
 
     // bool failed = false;
 
