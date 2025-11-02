@@ -6,6 +6,7 @@ GameEngine::GameEngine()
     graph = GameGraph();
     cdrom = GameCDROM();
     sound = GameSound();
+    GameSound::instance = &sound;
     controller = GameController();
     player = Player();
     player2 = Player();
@@ -48,6 +49,8 @@ void GameEngine::GameLoadStuff()
         snd.spu_channel = SPU_0CH;
         snd.spu_address = sound.SetSPUtransfer(&snd);
 
+        sound.mus = snd;
+
         free(file[1]);
     }
 
@@ -58,6 +61,8 @@ void GameEngine::GameLoadStuff()
     }
 
     cdrom.CDROM_Standby();
+
+    //sound.PlayMusic();
 }
 
 void GameEngine::GameLoop()
@@ -147,7 +152,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.cross_pressed[0])
                 {
-                    sound.PlaySFX(&snd);
+                    sound.PlaySFX(&snd,161);
                     controller.cross_pressed[0] = true;
                 }
             }
@@ -160,7 +165,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[0])
                 {
-                    memcard.MemCard_Save(0, player.x, player.y, region.REGION_CODE);
+                    memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                     controller.save_pressed[0] = true;
                 }
             }
@@ -168,7 +173,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[0])
                 {
-                    SAVEDATA data = memcard.MemCard_Load(0, region.REGION_CODE);
+                    SAVEDATA data = memcard.MemCard_Load(0x00, region.REGION_CODE);
                     player.x = data.data[0];
                     player.y = data.data[1];
                     controller.save_pressed[0] = true;
@@ -272,7 +277,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.cross_pressed[0])
                 {
-                    sound.PlaySFX(&snd);
+                    sound.PlaySFX(&snd,161);
                     controller.cross_pressed[0] = true;
                 }
             }
@@ -285,7 +290,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[0])
                 {
-                    memcard.MemCard_Save(0, player.x, player.y, region.REGION_CODE);
+                    memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                     controller.save_pressed[0] = true;
                 }
             }
@@ -293,7 +298,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[0])
                 {
-                    SAVEDATA data = memcard.MemCard_Load(0, region.REGION_CODE);
+                    SAVEDATA data = memcard.MemCard_Load(0x00, region.REGION_CODE);
                     player.x = data.data[0];
                     player.y = data.data[1];
                     controller.save_pressed[0] = true;
@@ -380,7 +385,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.cross_pressed[0])
                         {
-                            sound.PlaySFX(&snd);
+                            sound.PlaySFX(&snd,161);
                             controller.cross_pressed[0] = true;
                         }
                     }
@@ -393,7 +398,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[0])
                         {
-                            memcard.MemCard_Save(0, player.x, player.y, region.REGION_CODE);
+                            memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                             controller.save_pressed[0] = true;
                         }
                     }
@@ -401,7 +406,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[0])
                         {
-                            SAVEDATA data = memcard.MemCard_Load(0, region.REGION_CODE);
+                            SAVEDATA data = memcard.MemCard_Load(0x00, region.REGION_CODE);
                             player.x = data.data[0];
                             player.y = data.data[1];
                             controller.save_pressed[0] = true;
@@ -505,7 +510,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.cross_pressed[0])
                         {
-                            sound.PlaySFX(&snd);
+                            sound.PlaySFX(&snd,161);
                             controller.cross_pressed[0] = true;
                         }
                     }
@@ -518,7 +523,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[0])
                         {
-                            memcard.MemCard_Save(0, player.x, player.y, region.REGION_CODE);
+                            memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                             controller.save_pressed[0] = true;
                         }
                     }
@@ -526,7 +531,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[0])
                         {
-                            SAVEDATA data = memcard.MemCard_Load(0, region.REGION_CODE);
+                            SAVEDATA data = memcard.MemCard_Load(0x00, region.REGION_CODE);
                             player.x = data.data[0];
                             player.y = data.data[1];
                             controller.save_pressed[0] = true;
@@ -614,7 +619,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.cross_pressed[1])
                 {
-                    sound.PlaySFX(&snd);
+                    sound.PlaySFX(&snd,161);
                     controller.cross_pressed[1] = true;
                 }
             }
@@ -627,7 +632,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[1])
                 {
-                    memcard.MemCard_Save(1, player2.x, player2.y, region.REGION_CODE);
+                    memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                     controller.save_pressed[1] = true;
                 }
             }
@@ -635,7 +640,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[1])
                 {
-                    SAVEDATA data = memcard.MemCard_Load(1, region.REGION_CODE);
+                    SAVEDATA data = memcard.MemCard_Load(0x10, region.REGION_CODE);
                     player2.x = data.data[0];
                     player2.y = data.data[1];
                     controller.save_pressed[1] = true;
@@ -739,7 +744,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.cross_pressed[1])
                 {
-                    sound.PlaySFX(&snd);
+                    sound.PlaySFX(&snd,161);
                     controller.cross_pressed[1] = true;
                 }
             }
@@ -752,7 +757,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[1])
                 {
-                    memcard.MemCard_Save(1, player2.x, player2.y, region.REGION_CODE);
+                    memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                     controller.save_pressed[1] = true;
                 }
             }
@@ -760,7 +765,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[1])
                 {
-                    SAVEDATA data = memcard.MemCard_Load(1, region.REGION_CODE);
+                    SAVEDATA data = memcard.MemCard_Load(0x10, region.REGION_CODE);
                     player2.x = data.data[0];
                     player2.y = data.data[1];
                     controller.save_pressed[1] = true;
@@ -847,7 +852,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.cross_pressed[1])
                         {
-                            sound.PlaySFX(&snd);
+                            sound.PlaySFX(&snd,161);
                             controller.cross_pressed[1] = true;
                         }
                     }
@@ -860,7 +865,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[1])
                         {
-                            memcard.MemCard_Save(1, player2.x, player2.y, region.REGION_CODE);
+                            memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                             controller.save_pressed[1] = true;
                         }
                     }
@@ -868,7 +873,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[1])
                         {
-                            SAVEDATA data = memcard.MemCard_Load(1, region.REGION_CODE);
+                            SAVEDATA data = memcard.MemCard_Load(0x10, region.REGION_CODE);
                             player2.x = data.data[0];
                             player2.y = data.data[1];
                             controller.save_pressed[1] = true;
@@ -972,7 +977,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.cross_pressed[1])
                         {
-                            sound.PlaySFX(&snd);
+                            sound.PlaySFX(&snd,161);
                             controller.cross_pressed[1] = true;
                         }
                     }
@@ -985,7 +990,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[1])
                         {
-                            memcard.MemCard_Save(1, player2.x, player2.y, region.REGION_CODE);
+                            memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                             controller.save_pressed[1] = true;
                         }
                     }
@@ -993,7 +998,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[1])
                         {
-                            SAVEDATA data = memcard.MemCard_Load(1, region.REGION_CODE);
+                            SAVEDATA data = memcard.MemCard_Load(0x10, region.REGION_CODE);
                             player2.x = data.data[0];
                             player2.y = data.data[1];
                             controller.save_pressed[1] = true;

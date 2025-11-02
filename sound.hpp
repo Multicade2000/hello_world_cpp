@@ -1,5 +1,7 @@
 #include <sys/types.h>
 #include <stdio.h>
+#define _WCHAR_T
+#include <stdlib.h>
 #include <libapi.h>
 #include <libetc.h>
 #include <libspu.h>
@@ -23,7 +25,17 @@ typedef struct VAGheader{
     char  reserved2[12];
     char  name[16];
 
-}VAGhdr;
+} VAGhdr;
+
+typedef struct MUSheader {
+    u_char sampleid;
+    u_char channel;
+    u_char note_key;
+    u_long time;
+    u_char loopStart;
+    u_char loopEnd;
+    u_char padding[3];
+} MusHdr;
 
 class GameSound
 {
@@ -31,12 +43,24 @@ public:
     GameSound();
     ~GameSound();
 
+    int mus_tick;
+
+    static GameSound* instance;
+
+    VAGsound mus;
+
+    long musicEvent;
+
     char spu_malloc_rec[SPU_MALLOC_RECSIZ * (MALLOC_MAX+1)];
 
     void SoundInit();
     u_long SendVAGtoSPU(unsigned int VAG_data_size, u_char *VAG_data);
-    void SetVoiceAttr(unsigned int pitch, long channel, u_long soundAddr);
+    void SetVoiceAttr(unsigned int pitch, long channel, u_long soundAddr, unsigned char key);
 
     u_long SetSPUtransfer(VAGsound *sound);
-    void PlaySFX(VAGsound *sound);
+    void PlaySFX(VAGsound *sound, unsigned char key);
+
+    void LoadMusic(u_long *file);
+    void PlayMusic();
+    static long ProcessMusic();
 };
