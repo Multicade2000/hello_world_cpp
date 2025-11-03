@@ -22,6 +22,12 @@
                 <dir name="SND">
                     <file name="JUMP.VAG"    type="data"    source="../data/snd/jump.vag"/>
                 </dir>
+                <dir name="MUS">
+                    <file name="MUSIC.MUS" type="data" source="../data/mus/music.mus"/>
+                    <dir name="INST">
+                        <file name="MUSBOX.VAG" type="data" source="../data/mus/inst/musBox.vag"/>
+                    </dir>
+                </dir>
             </dir>
             <dummy sectors="1024"/>
         </directory_tree>

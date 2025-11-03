@@ -7,6 +7,9 @@ Running at 512x480/512x512 resolution is fantastic!
 # Pay attention to the sound system!
 It can play sound effects in any pitch!
 
+# Have fun with the music!
+Finally, we have music on our fun's side! Reading .MUS (Because .SEQ requires <libsnd.h>) just like any reqular MIDI's!
+
 # Behold, the CDRead() feature!
 Reading stuff from CD instead of EXE is better way to improve your future games!
 
@@ -22,6 +25,10 @@ This helps you remember which position have you been previously.
 D-Pad or Analog Sticks: Move your player.
 
 Cross: Play a sound.
+
+Square: Play the music.
+
+Circle: Stop the music.
 
 L1: Activates your big motor on the controller.
 

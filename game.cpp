@@ -15,7 +15,6 @@ GameEngine::GameEngine()
 
 GameEngine::~GameEngine()
 {
-    
 }
 
 void GameEngine::GameInit()
@@ -30,7 +29,7 @@ void GameEngine::GameInit()
 
 void GameEngine::GameLoadStuff()
 {
-    u_long *file[3];
+    u_long *file[4];
 
     if ((file[0] = cdrom.CDROM_ReadFile("\\DATA\\SPRT\\BIRD.TIM;1")))
     {
@@ -46,10 +45,7 @@ void GameEngine::GameLoadStuff()
     if ((file[1] = cdrom.CDROM_ReadFile("\\DATA\\SND\\JUMP.VAG;1")))
     {
         snd.VAGfile = (u_char *)file[1];
-        snd.spu_channel = SPU_0CH;
         snd.spu_address = sound.SetSPUtransfer(&snd);
-
-        sound.mus = snd;
 
         free(file[1]);
     }
@@ -60,9 +56,15 @@ void GameEngine::GameLoadStuff()
         free(file[2]);
     }
 
-    cdrom.CDROM_Standby();
+    if ((file[3] = cdrom.CDROM_ReadFile("\\DATA\\MUS\\INST\\MUSBOX.VAG;1")))
+    {
+        sound.mus[0].VAGfile = (u_char *)file[3];
+        sound.mus[0].spu_address = sound.SetSPUtransfer(&sound.mus[0]);
 
-    //sound.PlayMusic();
+        free(file[3]);
+    }
+
+    cdrom.CDROM_Standby();
 }
 
 void GameEngine::GameLoop()
@@ -72,6 +74,9 @@ void GameEngine::GameLoop()
     //     FntPrint("Sprite failed to load!");
     //     FntFlush(-1);
     // }
+
+    // FntPrint("%d",mus_size);
+    // FntFlush(-1);
 
     graph.CleanOT();
 
@@ -152,13 +157,41 @@ void GameEngine::GameLoop()
             {
                 if (!controller.cross_pressed[0])
                 {
-                    sound.PlaySFX(&snd,161);
+                    sound.PlaySFX(&snd, 0, 0xA1BA);
                     controller.cross_pressed[0] = true;
                 }
             }
             else
             {
                 controller.cross_pressed[0] = false;
+            }
+
+            if (!(btn & PAD_SQUARE))
+            {
+                if (!controller.mus_pressed[0])
+                {
+                    sound.StopMusic();
+                    u_long *file;
+                    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
+                    {
+                        sound.LoadMusic(file, 14, 2);
+                        sound.PlayMusic();
+                        free(file);
+                    }
+                    cdrom.CDROM_Standby();
+                    controller.mus_pressed[0] = true;
+                }
+            }
+            else if (!(btn & PAD_CIRCLE))
+            {
+                if (!controller.mus_pressed[0])
+                {
+                    sound.StopMusic();
+                }
+            }
+            else
+            {
+                controller.mus_pressed[0] = false;
             }
 
             if (!(btn & PAD_SELECT))
@@ -277,13 +310,41 @@ void GameEngine::GameLoop()
             {
                 if (!controller.cross_pressed[0])
                 {
-                    sound.PlaySFX(&snd,161);
+                    sound.PlaySFX(&snd, 0, 0xA1BA);
                     controller.cross_pressed[0] = true;
                 }
             }
             else
             {
                 controller.cross_pressed[0] = false;
+            }
+
+            if (!(btn & PAD_SQUARE))
+            {
+                if (!controller.mus_pressed[0])
+                {
+                    sound.StopMusic();
+                    u_long *file;
+                    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
+                    {
+                        sound.LoadMusic(file, 14, 2);
+                        sound.PlayMusic();
+                        free(file);
+                    }
+                    cdrom.CDROM_Standby();
+                    controller.mus_pressed[0] = true;
+                }
+            }
+            else if (!(btn & PAD_CIRCLE))
+            {
+                if (!controller.mus_pressed[0])
+                {
+                    sound.StopMusic();
+                }
+            }
+            else
+            {
+                controller.mus_pressed[0] = false;
             }
 
             if (!(btn & PAD_SELECT))
@@ -385,13 +446,41 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.cross_pressed[0])
                         {
-                            sound.PlaySFX(&snd,161);
+                            sound.PlaySFX(&snd, 0, 0xA1BA);
                             controller.cross_pressed[0] = true;
                         }
                     }
                     else
                     {
                         controller.cross_pressed[0] = false;
+                    }
+
+                    if (!(btn & PAD_SQUARE))
+                    {
+                        if (!controller.mus_pressed[0])
+                        {
+                            sound.StopMusic();
+                            u_long *file;
+                            if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
+                            {
+                                sound.LoadMusic(file, 14, 2);
+                                sound.PlayMusic();
+                                free(file);
+                            }
+                            cdrom.CDROM_Standby();
+                            controller.mus_pressed[0] = true;
+                        }
+                    }
+                    else if (!(btn & PAD_CIRCLE))
+                    {
+                        if (!controller.mus_pressed[0])
+                        {
+                            sound.StopMusic();
+                        }
+                    }
+                    else
+                    {
+                        controller.mus_pressed[0] = false;
                     }
 
                     if (!(btn & PAD_SELECT))
@@ -510,13 +599,41 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.cross_pressed[0])
                         {
-                            sound.PlaySFX(&snd,161);
+                            sound.PlaySFX(&snd, 0, 0xA1BA);
                             controller.cross_pressed[0] = true;
                         }
                     }
                     else
                     {
                         controller.cross_pressed[0] = false;
+                    }
+
+                    if (!(btn & PAD_SQUARE))
+                    {
+                        if (!controller.mus_pressed[0])
+                        {
+                            sound.StopMusic();
+                            u_long *file;
+                            if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
+                            {
+                                sound.LoadMusic(file, 14, 2);
+                                sound.PlayMusic();
+                                free(file);
+                            }
+                            cdrom.CDROM_Standby();
+                            controller.mus_pressed[0] = true;
+                        }
+                    }
+                    else if (!(btn & PAD_CIRCLE))
+                    {
+                        if (!controller.mus_pressed[0])
+                        {
+                            sound.StopMusic();
+                        }
+                    }
+                    else
+                    {
+                        controller.mus_pressed[0] = false;
                     }
 
                     if (!(btn & PAD_SELECT))
@@ -619,13 +736,41 @@ void GameEngine::GameLoop()
             {
                 if (!controller.cross_pressed[1])
                 {
-                    sound.PlaySFX(&snd,161);
+                    sound.PlaySFX(&snd, 0, 0xA1BA);
                     controller.cross_pressed[1] = true;
                 }
             }
             else
             {
                 controller.cross_pressed[1] = false;
+            }
+
+            if (!(btn2 & PAD_SQUARE))
+            {
+                if (!controller.mus_pressed[1])
+                {
+                    sound.StopMusic();
+                    u_long *file;
+                    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
+                    {
+                        sound.LoadMusic(file, 14, 2);
+                        sound.PlayMusic();
+                        free(file);
+                    }
+                    cdrom.CDROM_Standby();
+                    controller.mus_pressed[1] = true;
+                }
+            }
+            else if (!(btn2 & PAD_CIRCLE))
+            {
+                if (!controller.mus_pressed[1])
+                {
+                    sound.StopMusic();
+                }
+            }
+            else
+            {
+                controller.mus_pressed[1] = false;
             }
 
             if (!(btn2 & PAD_SELECT))
@@ -744,13 +889,41 @@ void GameEngine::GameLoop()
             {
                 if (!controller.cross_pressed[1])
                 {
-                    sound.PlaySFX(&snd,161);
+                    sound.PlaySFX(&snd, 0, 0xA1BA);
                     controller.cross_pressed[1] = true;
                 }
             }
             else
             {
                 controller.cross_pressed[1] = false;
+            }
+
+            if (!(btn2 & PAD_SQUARE))
+            {
+                if (!controller.mus_pressed[1])
+                {
+                    sound.StopMusic();
+                    u_long *file;
+                    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
+                    {
+                        sound.LoadMusic(file, 14, 2);
+                        sound.PlayMusic();
+                        free(file);
+                    }
+                    cdrom.CDROM_Standby();
+                    controller.mus_pressed[1] = true;
+                }
+            }
+            else if (!(btn2 & PAD_CIRCLE))
+            {
+                if (!controller.mus_pressed[1])
+                {
+                    sound.StopMusic();
+                }
+            }
+            else
+            {
+                controller.mus_pressed[1] = false;
             }
 
             if (!(btn2 & PAD_SELECT))
@@ -852,13 +1025,41 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.cross_pressed[1])
                         {
-                            sound.PlaySFX(&snd,161);
+                            sound.PlaySFX(&snd, 0, 0xA1BA);
                             controller.cross_pressed[1] = true;
                         }
                     }
                     else
                     {
                         controller.cross_pressed[1] = false;
+                    }
+
+                    if (!(btn2 & PAD_SQUARE))
+                    {
+                        if (!controller.mus_pressed[1])
+                        {
+                            sound.StopMusic();
+                            u_long *file;
+                            if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
+                            {
+                                sound.LoadMusic(file, 14, 2);
+                                sound.PlayMusic();
+                                free(file);
+                            }
+                            cdrom.CDROM_Standby();
+                            controller.mus_pressed[1] = true;
+                        }
+                    }
+                    else if (!(btn2 & PAD_CIRCLE))
+                    {
+                        if (!controller.mus_pressed[1])
+                        {
+                            sound.StopMusic();
+                        }
+                    }
+                    else
+                    {
+                        controller.mus_pressed[1] = false;
                     }
 
                     if (!(btn2 & PAD_SELECT))
@@ -977,13 +1178,41 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.cross_pressed[1])
                         {
-                            sound.PlaySFX(&snd,161);
+                            sound.PlaySFX(&snd, 0, 0xA1BA);
                             controller.cross_pressed[1] = true;
                         }
                     }
                     else
                     {
                         controller.cross_pressed[1] = false;
+                    }
+
+                    if (!(btn2 & PAD_SQUARE))
+                    {
+                        if (!controller.mus_pressed[1])
+                        {
+                            sound.StopMusic();
+                            u_long *file;
+                            if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
+                            {
+                                sound.LoadMusic(file, 14, 2);
+                                sound.PlayMusic();
+                                free(file);
+                            }
+                            cdrom.CDROM_Standby();
+                            controller.mus_pressed[1] = true;
+                        }
+                    }
+                    else if (!(btn2 & PAD_CIRCLE))
+                    {
+                        if (!controller.mus_pressed[1])
+                        {
+                            sound.StopMusic();
+                        }
+                    }
+                    else
+                    {
+                        controller.mus_pressed[1] = false;
                     }
 
                     if (!(btn2 & PAD_SELECT))

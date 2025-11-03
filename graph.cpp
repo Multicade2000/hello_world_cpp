@@ -17,6 +17,8 @@ void GameGraph::GraphInit()
 {
     ResetGraph(0);
 
+    ClearVRAM();
+
     if (pal_mode)
     {
         ResH = ResH > 256 ? 512 : 256;
@@ -48,7 +50,6 @@ void GameGraph::GraphInit()
 
     nextpri = pribuff[0];
 
-    ClearVRAM();
     FntLoad(960,0);
     FntOpen(32,48,ResW-32,ResH-48,0,400);
 }

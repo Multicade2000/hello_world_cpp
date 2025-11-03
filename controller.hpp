@@ -33,6 +33,7 @@ public:
     ~GameController();
 
     bool cross_pressed[2];
+    bool mus_pressed[2];
     bool vib_pressed[2];
     bool save_pressed[2];
 
