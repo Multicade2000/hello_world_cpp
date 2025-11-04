@@ -15,7 +15,7 @@ GameEngine::GameEngine()
 
 GameEngine::~GameEngine()
 {
-
+    
 }
 
 void GameEngine::GameInit()
@@ -202,6 +202,19 @@ void GameEngine::GameLoop()
                 controller.mus_pressed[0] = false;
             }
 
+            if (!(btn & PAD_TRIANGLE))
+            {
+                if (!controller.xa_pressed[0])
+                {
+                    cdrom.CDROM_XAPlay("\\DATA\\XA\\SPEECH.XA;1", region.REGION_CODE, false);
+                    controller.xa_pressed[0] = true;
+                }
+            }
+            else
+            {
+                controller.xa_pressed[0] = false;
+            }
+
             if (!(btn & PAD_SELECT))
             {
                 if (!controller.save_pressed[0])
@@ -222,6 +235,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[0])
                 {
+                    cdrom.CDROM_XAStop();
                     SAVEDATA data = memcard.MemCard_Load(0x00, region.REGION_CODE);
                     player.x = data.data[0];
                     player.y = data.data[1];
@@ -364,6 +378,19 @@ void GameEngine::GameLoop()
                 controller.mus_pressed[0] = false;
             }
 
+            if (!(btn & PAD_TRIANGLE))
+            {
+                if (!controller.xa_pressed[0])
+                {
+                    cdrom.CDROM_XAPlay("\\DATA\\XA\\SPEECH.XA;1", region.REGION_CODE, false);
+                    controller.xa_pressed[0] = true;
+                }
+            }
+            else
+            {
+                controller.xa_pressed[0] = false;
+            }
+
             if (!(btn & PAD_SELECT))
             {
                 if (!controller.save_pressed[0])
@@ -384,6 +411,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[0])
                 {
+                    cdrom.CDROM_XAStop();
                     SAVEDATA data = memcard.MemCard_Load(0x00, region.REGION_CODE);
                     player.x = data.data[0];
                     player.y = data.data[1];
@@ -509,6 +537,19 @@ void GameEngine::GameLoop()
                         controller.mus_pressed[0] = false;
                     }
 
+                    if (!(btn & PAD_TRIANGLE))
+                    {
+                        if (!controller.xa_pressed[0])
+                        {
+                            cdrom.CDROM_XAPlay("\\DATA\\XA\\SPEECH.XA;1", region.REGION_CODE, false);
+                            controller.xa_pressed[0] = true;
+                        }
+                    }
+                    else
+                    {
+                        controller.xa_pressed[0] = false;
+                    }
+
                     if (!(btn & PAD_SELECT))
                     {
                         if (!controller.save_pressed[0])
@@ -529,6 +570,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[0])
                         {
+                            cdrom.CDROM_XAStop();
                             SAVEDATA data = memcard.MemCard_Load(0x00, region.REGION_CODE);
                             player.x = data.data[0];
                             player.y = data.data[1];
@@ -671,6 +713,19 @@ void GameEngine::GameLoop()
                         controller.mus_pressed[0] = false;
                     }
 
+                    if (!(btn & PAD_TRIANGLE))
+                    {
+                        if (!controller.xa_pressed[0])
+                        {
+                            cdrom.CDROM_XAPlay("\\DATA\\XA\\SPEECH.XA;1", region.REGION_CODE, false);
+                            controller.xa_pressed[0] = true;
+                        }
+                    }
+                    else
+                    {
+                        controller.xa_pressed[0] = false;
+                    }
+
                     if (!(btn & PAD_SELECT))
                     {
                         if (!controller.save_pressed[0])
@@ -691,6 +746,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[0])
                         {
+                            cdrom.CDROM_XAStop();
                             SAVEDATA data = memcard.MemCard_Load(0x00, region.REGION_CODE);
                             player.x = data.data[0];
                             player.y = data.data[1];
@@ -817,6 +873,19 @@ void GameEngine::GameLoop()
                 controller.mus_pressed[1] = false;
             }
 
+            if (!(btn2 & PAD_TRIANGLE))
+            {
+                if (!controller.xa_pressed[1])
+                {
+                    cdrom.CDROM_XAPlay("\\DATA\\XA\\SPEECH.XA;1", region.REGION_CODE, false);
+                    controller.xa_pressed[1] = true;
+                }
+            }
+            else
+            {
+                controller.xa_pressed[1] = false;
+            }
+
             if (!(btn2 & PAD_SELECT))
             {
                 if (!controller.save_pressed[1])
@@ -837,6 +906,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[1])
                 {
+                    cdrom.CDROM_XAStop();
                     SAVEDATA data = memcard.MemCard_Load(0x10, region.REGION_CODE);
                     player2.x = data.data[0];
                     player2.y = data.data[1];
@@ -979,6 +1049,19 @@ void GameEngine::GameLoop()
                 controller.mus_pressed[1] = false;
             }
 
+            if (!(btn2 & PAD_TRIANGLE))
+            {
+                if (!controller.xa_pressed[1])
+                {
+                    cdrom.CDROM_XAPlay("\\DATA\\XA\\SPEECH.XA;1", region.REGION_CODE, false);
+                    controller.xa_pressed[1] = true;
+                }
+            }
+            else
+            {
+                controller.xa_pressed[1] = false;
+            }
+
             if (!(btn2 & PAD_SELECT))
             {
                 if (!controller.save_pressed[1])
@@ -999,6 +1082,7 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[1])
                 {
+                    cdrom.CDROM_XAStop();
                     SAVEDATA data = memcard.MemCard_Load(0x10, region.REGION_CODE);
                     player2.x = data.data[0];
                     player2.y = data.data[1];
@@ -1124,6 +1208,19 @@ void GameEngine::GameLoop()
                         controller.mus_pressed[1] = false;
                     }
 
+                    if (!(btn2 & PAD_TRIANGLE))
+                    {
+                        if (!controller.xa_pressed[1])
+                        {
+                            cdrom.CDROM_XAPlay("\\DATA\\XA\\SPEECH.XA;1", region.REGION_CODE, false);
+                            controller.xa_pressed[1] = true;
+                        }
+                    }
+                    else
+                    {
+                        controller.xa_pressed[1] = false;
+                    }
+
                     if (!(btn2 & PAD_SELECT))
                     {
                         if (!controller.save_pressed[1])
@@ -1144,6 +1241,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[1])
                         {
+                            cdrom.CDROM_XAStop();
                             SAVEDATA data = memcard.MemCard_Load(0x10, region.REGION_CODE);
                             player2.x = data.data[0];
                             player2.y = data.data[1];
@@ -1286,6 +1384,19 @@ void GameEngine::GameLoop()
                         controller.mus_pressed[1] = false;
                     }
 
+                    if (!(btn2 & PAD_TRIANGLE))
+                    {
+                        if (!controller.xa_pressed[1])
+                        {
+                            cdrom.CDROM_XAPlay("\\DATA\\XA\\SPEECH.XA;1", region.REGION_CODE, false);
+                            controller.xa_pressed[1] = true;
+                        }
+                    }
+                    else
+                    {
+                        controller.xa_pressed[1] = false;
+                    }
+
                     if (!(btn2 & PAD_SELECT))
                     {
                         if (!controller.save_pressed[1])
@@ -1306,6 +1417,7 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[1])
                         {
+                            cdrom.CDROM_XAStop();
                             SAVEDATA data = memcard.MemCard_Load(0x10, region.REGION_CODE);
                             player2.x = data.data[0];
                             player2.y = data.data[1];
@@ -1321,8 +1433,8 @@ void GameEngine::GameLoop()
         }
     }
 
-    graph.nextpri = player.DrawEggs(graph.ot[graph.db],graph.nextpri,graph.ResW,graph.ResH);
-    graph.nextpri = player2.DrawEggs(graph.ot[graph.db],graph.nextpri,graph.ResW,graph.ResH);
+    graph.nextpri = player.DrawEggs(graph.ot[graph.db], graph.nextpri, graph.ResW, graph.ResH);
+    graph.nextpri = player2.DrawEggs(graph.ot[graph.db], graph.nextpri, graph.ResW, graph.ResH);
 
     if (player.x < 0)
     {
@@ -1363,4 +1475,5 @@ void GameEngine::GameLoop()
     graph.GraphDisp();
 
     cdrom.CDROM_Standby();
+    cdrom.CDROM_XAUpdate();
 }

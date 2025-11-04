@@ -26,11 +26,12 @@ void GameSound::SoundInit()
     SpuInit();
     SpuInitMalloc(MALLOC_MAX, spu_malloc_rec);
     SpuWrite0(0xFFFF);
-    commonAttributes.mask = (SPU_COMMON_MVOLL | SPU_COMMON_MVOLR | SPU_COMMON_CDVOLL | SPU_COMMON_CDVOLR);
+    commonAttributes.mask = (SPU_COMMON_MVOLL | SPU_COMMON_MVOLR | SPU_COMMON_CDVOLL | SPU_COMMON_CDVOLR | SPU_COMMON_CDMIX);
     commonAttributes.mvol.left = 0x3fff;
     commonAttributes.mvol.right = 0x3fff;
     commonAttributes.cd.volume.left = 0x3fff;
     commonAttributes.cd.volume.right = 0x3fff;
+    commonAttributes.cd.mix = SPU_ON;
     SpuSetCommonAttr(&commonAttributes);
     SpuSetIRQ(SPU_OFF);
 }

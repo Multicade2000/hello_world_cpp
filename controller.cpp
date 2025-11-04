@@ -18,11 +18,13 @@ GameController::GameController()
     vib_pressed[0] = false;
     save_pressed[0] = false;
     mus_pressed[0] = false;
+    xa_pressed[0] = false;
 
     cross_pressed[1] = false;
     vib_pressed[1] = false;
     save_pressed[1] = false;
     mus_pressed[1] = false;
+    xa_pressed[1] = false;
 
     vib_sync[0] = false;
     vib_sync[1] = false;

@@ -12,6 +12,7 @@ Finally, we have music on our fun's side! Reading .MUS (Because .SEQ requires <l
 
 # Behold, the CDRead() feature!
 Reading stuff from CD instead of EXE is better way to improve your future games!
+The program can also read .XA files in exact length! (If well calculated...)
 
 # Feel the controllers!
 The support with MultiTap and vibration!
@@ -29,6 +30,8 @@ Cross: Play a sound.
 Square: Play the music.
 
 Circle: Stop the music.
+
+Triangle: Play the CD-XA speech sound.
 
 L1: Activates your big motor on the controller.
 
