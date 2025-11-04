@@ -29,6 +29,9 @@
                         <file name="MUSBOX.VAG" type="data" source="../data/mus/inst/musBox.vag"/>
                     </dir>
                 </dir>
+                <dir name="XA">
+                    <file name="SPEECH.XA" type="xa" source="../data/xa/speech.xa"/>
+                </dir>
             </dir>
             <dummy sectors="1024"/>
         </directory_tree>

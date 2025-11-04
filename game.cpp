@@ -202,6 +202,14 @@ void GameEngine::GameLoop()
                 controller.mus_pressed[0] = false;
             }
 
+            if (!(btn & PAD_TRIANGLE))
+            {
+                if (!controller.xa_pressed[0])
+                {
+                    cdrom.CDROM_XAPlay("\\DATA\\XA\\SPEECH.XA;1",region.REGION_CODE,false);
+                }
+            }
+
             if (!(btn & PAD_SELECT))
             {
                 if (!controller.save_pressed[0])
@@ -1363,4 +1371,5 @@ void GameEngine::GameLoop()
     graph.GraphDisp();
 
     cdrom.CDROM_Standby();
+    cdrom.CDROM_XAUpdate();
 }
