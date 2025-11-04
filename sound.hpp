@@ -52,6 +52,8 @@ public:
     int chan_loop[12];
     bool chan_start[12];
 
+    int stopper;
+
     int max_channels;
 
     int curPos[12];

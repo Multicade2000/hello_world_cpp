@@ -10,6 +10,8 @@ GameSound::GameSound()
         curPos[i] = 0;
     }
 
+    stopper = 0;
+
     muser = nullptr;
 }
 
@@ -107,10 +109,7 @@ void GameSound::PlaySFX(VAGsound *sound, int channel, u_short key)
 
 void GameSound::StopSFX(int channel)
 {
-    for (int i = 0; i < 12; i++)
-    {
-        SpuSetKey(SpuOff, (0x1L << channel));
-    }
+    SpuSetKey(SpuOff, (0x1L << channel));
 }
 
 void GameSound::LoadMusic(u_long *file, int size, int max_chans)
@@ -165,20 +164,24 @@ void GameSound::PlayMusic()
 
 void GameSound::StopMusic()
 {
-    StopRCnt(RCntCNT1);
-    DisableEvent(musicEvent);
-    CloseEvent(musicEvent);
-    for (int i = 0; i < 12; i++)
+    if (muser)
     {
-        StopSFX(i);
-        curPos[i] = 0;
-        mus_tick[i] = 0;
-        chan_ofs[i] = 0;
-        chan_start[i] = false;
-        chan_loop[i] = 0;
+        StopRCnt(RCntCNT1);
+        DisableEvent(musicEvent);
+        CloseEvent(musicEvent);
+        for (int i = 0; i < 12; i++)
+        {
+            StopSFX(i);
+            curPos[i] = 0;
+            mus_tick[i] = 0;
+            chan_ofs[i] = 0;
+            chan_start[i] = false;
+            chan_loop[i] = 0;
+            VSync(0);
+        }
+        free(muser);
+        muser = nullptr;
     }
-    free(muser);
-    muser = nullptr;
 }
 
 long GameSound::ProcessMusic()
@@ -197,7 +200,10 @@ long GameSound::ProcessMusic()
             }
             else
             {
-                instance->StopSFX(instance->muser[instance->chan_ofs[i] + instance->curPos[i]].channel);
+                if (i == instance->stopper)
+                {
+                    instance->StopSFX(instance->muser[instance->chan_ofs[i] + instance->curPos[i]].channel);
+                }
                 instance->mus_tick[i] = 0;
                 if (instance->muser[instance->chan_ofs[i] + instance->curPos[i]].loopEnd == 0x01)
                 {
@@ -213,6 +219,15 @@ long GameSound::ProcessMusic()
                 }
             }
         }
+    }
+
+    if (instance->stopper < instance->max_channels - 1)
+    {
+        instance->stopper++;
+    }
+    else
+    {
+        instance->stopper = 0;
     }
 
     SetRCnt(RCntCNT1, 125, RCntMdINTR);
