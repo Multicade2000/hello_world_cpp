@@ -2,7 +2,8 @@
 
 GameCDROM::GameCDROM()
 {
-
+    cd_tick = 0;
+    cd_standby = false;
 }
 
 GameCDROM::~GameCDROM()
@@ -19,6 +20,9 @@ u_long* GameCDROM::CDROM_ReadFile(const char* filename)
 {
     CdlFILE	file;
     u_long	*buffer;
+
+    cd_standby = false;
+    cd_tick = 0;
 
     if( !CdSearchFile( &file, (char*)filename ) )
     {
@@ -38,7 +42,19 @@ u_long* GameCDROM::CDROM_ReadFile(const char* filename)
 
 void GameCDROM::CDROM_Standby()
 {
-    u_char param = 0x00;
-    CdControl(CdlSetmode,&param,0);
-    CdControl(CdlStandby,0,0);
+    if (cd_standby && cd_tick != 0)
+    {
+        u_char param = 0x00;
+        CdControl(CdlSetmode,&param,0);
+        CdControl(CdlStandby,0,0);
+        cd_tick = 0;
+    }
+    else
+    {
+        cd_tick++;
+        if (cd_tick >= 1000)
+        {
+            cd_standby = true;
+        }
+    }
 }

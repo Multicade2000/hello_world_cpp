@@ -11,6 +11,9 @@ public:
     GameCDROM();
     ~GameCDROM();
 
+    int cd_tick;
+    bool cd_standby;
+
     void CDROM_Init();
     u_long *CDROM_ReadFile(const char* filename);
 

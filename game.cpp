@@ -15,6 +15,7 @@ GameEngine::GameEngine()
 
 GameEngine::~GameEngine()
 {
+
 }
 
 void GameEngine::GameInit()
@@ -29,42 +30,42 @@ void GameEngine::GameInit()
 
 void GameEngine::GameLoadStuff()
 {
-    u_long *file[4];
+    u_long *file;
 
-    if ((file[0] = cdrom.CDROM_ReadFile("\\DATA\\SPRT\\BIRD.TIM;1")))
+    if ((file = cdrom.CDROM_ReadFile("\\DATA\\SPRT\\BIRD.TIM;1")))
     {
-        graph.LoadTexture(file[0]);
+        graph.LoadTexture(file);
 
-        free(file[0]);
+        free(file);
     }
     // else
     // {
     //     failed = true;
     // }
 
-    if ((file[1] = cdrom.CDROM_ReadFile("\\DATA\\SND\\JUMP.VAG;1")))
+    if ((file = cdrom.CDROM_ReadFile("\\DATA\\SND\\JUMP.VAG;1")))
     {
-        snd.VAGfile = (u_char *)file[1];
+        snd.VAGfile = (u_char *)file;
         snd.spu_address = sound.SetSPUtransfer(&snd);
 
-        free(file[1]);
+        free(file);
     }
 
-    if ((file[2] = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
+    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\INST\\MUSBOX.VAG;1")))
     {
-        memcard.PrepareHeader(file[2]);
-        free(file[2]);
-    }
-
-    if ((file[3] = cdrom.CDROM_ReadFile("\\DATA\\MUS\\INST\\MUSBOX.VAG;1")))
-    {
-        sound.mus[0].VAGfile = (u_char *)file[3];
+        sound.mus[0].VAGfile = (u_char *)file;
         sound.mus[0].spu_address = sound.SetSPUtransfer(&sound.mus[0]);
 
-        free(file[3]);
+        free(file);
     }
 
-    cdrom.CDROM_Standby();
+    // if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
+    // {
+    //     memcard.PrepareHeader(file);
+    //     free(file);
+    // }
+
+    // cdrom.CDROM_Standby();
 }
 
 void GameEngine::GameLoop()
@@ -178,7 +179,7 @@ void GameEngine::GameLoop()
                         sound.PlayMusic();
                         free(file);
                     }
-                    cdrom.CDROM_Standby();
+                    // cdrom.CDROM_Standby();
                     controller.mus_pressed[0] = true;
                 }
             }
@@ -198,6 +199,14 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[0])
                 {
+                    u_long *file;
+
+                    if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
+                    {
+                        memcard.PrepareHeader(file);
+                        free(file);
+                    }
+
                     memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                     controller.save_pressed[0] = true;
                 }
@@ -331,7 +340,7 @@ void GameEngine::GameLoop()
                         sound.PlayMusic();
                         free(file);
                     }
-                    cdrom.CDROM_Standby();
+                    // cdrom.CDROM_Standby();
                     controller.mus_pressed[0] = true;
                 }
             }
@@ -351,6 +360,14 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[0])
                 {
+                    u_long *file;
+
+                    if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
+                    {
+                        memcard.PrepareHeader(file);
+                        free(file);
+                    }
+
                     memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                     controller.save_pressed[0] = true;
                 }
@@ -467,7 +484,7 @@ void GameEngine::GameLoop()
                                 sound.PlayMusic();
                                 free(file);
                             }
-                            cdrom.CDROM_Standby();
+                            // cdrom.CDROM_Standby();
                             controller.mus_pressed[0] = true;
                         }
                     }
@@ -487,6 +504,14 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[0])
                         {
+                            u_long *file;
+
+                            if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
+                            {
+                                memcard.PrepareHeader(file);
+                                free(file);
+                            }
+
                             memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                             controller.save_pressed[0] = true;
                         }
@@ -620,7 +645,7 @@ void GameEngine::GameLoop()
                                 sound.PlayMusic();
                                 free(file);
                             }
-                            cdrom.CDROM_Standby();
+                            // cdrom.CDROM_Standby();
                             controller.mus_pressed[0] = true;
                         }
                     }
@@ -640,6 +665,14 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[0])
                         {
+                            u_long *file;
+
+                            if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
+                            {
+                                memcard.PrepareHeader(file);
+                                free(file);
+                            }
+
                             memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                             controller.save_pressed[0] = true;
                         }
@@ -757,7 +790,7 @@ void GameEngine::GameLoop()
                         sound.PlayMusic();
                         free(file);
                     }
-                    cdrom.CDROM_Standby();
+                    // cdrom.CDROM_Standby();
                     controller.mus_pressed[1] = true;
                 }
             }
@@ -777,6 +810,14 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[1])
                 {
+                    u_long *file;
+
+                    if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
+                    {
+                        memcard.PrepareHeader(file);
+                        free(file);
+                    }
+
                     memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                     controller.save_pressed[1] = true;
                 }
@@ -910,7 +951,7 @@ void GameEngine::GameLoop()
                         sound.PlayMusic();
                         free(file);
                     }
-                    cdrom.CDROM_Standby();
+                    // cdrom.CDROM_Standby();
                     controller.mus_pressed[1] = true;
                 }
             }
@@ -930,6 +971,14 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[1])
                 {
+                    u_long *file;
+
+                    if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
+                    {
+                        memcard.PrepareHeader(file);
+                        free(file);
+                    }
+
                     memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                     controller.save_pressed[1] = true;
                 }
@@ -1046,7 +1095,7 @@ void GameEngine::GameLoop()
                                 sound.PlayMusic();
                                 free(file);
                             }
-                            cdrom.CDROM_Standby();
+                            // cdrom.CDROM_Standby();
                             controller.mus_pressed[1] = true;
                         }
                     }
@@ -1066,6 +1115,14 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[1])
                         {
+                            u_long *file;
+
+                            if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
+                            {
+                                memcard.PrepareHeader(file);
+                                free(file);
+                            }
+
                             memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                             controller.save_pressed[1] = true;
                         }
@@ -1199,7 +1256,7 @@ void GameEngine::GameLoop()
                                 sound.PlayMusic();
                                 free(file);
                             }
-                            cdrom.CDROM_Standby();
+                            // cdrom.CDROM_Standby();
                             controller.mus_pressed[1] = true;
                         }
                     }
@@ -1219,6 +1276,14 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[1])
                         {
+                            u_long *file;
+
+                            if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
+                            {
+                                memcard.PrepareHeader(file);
+                                free(file);
+                            }
+
                             memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                             controller.save_pressed[1] = true;
                         }
@@ -1279,4 +1344,6 @@ void GameEngine::GameLoop()
     }
 
     graph.GraphDisp();
+
+    cdrom.CDROM_Standby();
 }
