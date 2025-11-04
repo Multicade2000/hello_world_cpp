@@ -6,11 +6,10 @@
 #include <libetc.h>
 #include <libspu.h>
 
-#define MALLOC_MAX 2
+#define MALLOC_MAX 256
 #define SWAP_ENDIAN32(x) (((x)>>24) | (((x)>>8) & 0xFF00) | (((x)<<8) & 0x00FF0000) | ((x)<<24))
 
 typedef struct VAGsound {
-    u_char * VAGfile;
     u_long spu_address;
     u_int pitch;
 } VAGsound;
@@ -66,7 +65,7 @@ public:
     u_long SendVAGtoSPU(unsigned int VAG_data_size, u_char *VAG_data);
     void SetVoiceAttr(unsigned int pitch, int channel, u_long soundAddr, u_short key);
 
-    u_long SetSPUtransfer(VAGsound *sound);
+    u_long SetSPUtransfer(VAGsound *sound, u_long *file);
     void PlaySFX(VAGsound *sound, int channel, u_short key);
     void StopSFX(int channel);
 

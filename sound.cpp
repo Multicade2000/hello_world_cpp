@@ -80,14 +80,14 @@ void GameSound::SetVoiceAttr(unsigned int pitch, int channel, u_long soundAddr, 
     SpuSetVoiceAttr(&voiceAttributes);
 }
 
-u_long GameSound::SetSPUtransfer(VAGsound *sound)
+u_long GameSound::SetSPUtransfer(VAGsound *sound, u_long *file)
 {
     u_long transferred, spu_address;
-    const VAGhdr *VAGheader = (VAGhdr *)sound->VAGfile;
+    const VAGhdr *VAGheader = (VAGhdr *)file;
     sound->pitch = (SWAP_ENDIAN32(VAGheader->samplingFrequency) << 12) / 44100L;
     spu_address = SpuMalloc(SWAP_ENDIAN32(VAGheader->dataSize));
     SpuSetTransferStartAddr(spu_address);
-    transferred = SendVAGtoSPU(SWAP_ENDIAN32(VAGheader->dataSize), sound->VAGfile);
+    transferred = SendVAGtoSPU(SWAP_ENDIAN32(VAGheader->dataSize), (u_char *)file);
     // SetVoiceAttr(sound->pitch, sound->spu_channel, spu_address);
 
     return spu_address;

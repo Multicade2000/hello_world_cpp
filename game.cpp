@@ -51,16 +51,14 @@ void GameEngine::GameLoadStuff()
 
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\SND\\JUMP.VAG;1")))
     {
-        snd.VAGfile = (u_char *)file;
-        snd.spu_address = sound.SetSPUtransfer(&snd);
+        snd.spu_address = sound.SetSPUtransfer(&snd, file);
 
         free(file);
     }
 
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\INST\\MUSBOX.VAG;1")))
     {
-        sound.mus[0].VAGfile = (u_char *)file;
-        sound.mus[0].spu_address = sound.SetSPUtransfer(&sound.mus[0]);
+        sound.mus[0].spu_address = sound.SetSPUtransfer(&sound.mus[0],file);
 
         free(file);
     }
