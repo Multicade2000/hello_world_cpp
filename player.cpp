@@ -4,6 +4,7 @@ Player::Player()
 {
     x = 48;
     y = 48;
+    eggs = nullptr;
 }
 
 Player::~Player()
@@ -36,4 +37,45 @@ char *Player::DrawSprite(u_long *ot, char *pri)
     addPrim(ot, tpage);
 
     return pri+sizeof(DR_TPAGE);
+}
+
+void Player::SpawnEgg()
+{
+    Egg *mem = (Egg *)malloc(sizeof(Egg));
+    if (!mem) return;
+    mem->x = x+64;
+    mem->y = y+12;
+
+    mem->next = eggs;
+    eggs = mem;
+}
+
+char *Player::DrawEggs(u_long *ot, char *pri, int ResW, int ResH)
+{
+    Egg* curr = eggs;
+    Egg* prev = nullptr;
+
+    while(curr)
+    {
+        pri = curr->DrawSprite(ot, pri);
+        curr->Update();
+
+        if (curr->IsOffScreen(ResW, ResH))
+        {
+            Egg* toDelete = curr;
+            if (prev) prev->next = curr->next;
+            else eggs = curr->next;
+
+            curr = curr->next;
+
+            toDelete->~Egg();
+            free(toDelete);
+            continue;
+        }
+
+        prev = curr;
+        curr = curr->next;
+    }
+
+    return pri;
 }

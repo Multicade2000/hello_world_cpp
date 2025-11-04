@@ -42,6 +42,12 @@ void GameEngine::GameLoadStuff()
     // {
     //     failed = true;
     // }
+    if ((file = cdrom.CDROM_ReadFile("\\DATA\\SPRT\\EGG.TIM;1")))
+    {
+        graph.LoadTexture(file);
+
+        free(file);
+    }
 
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\SND\\JUMP.VAG;1")))
     {
@@ -158,7 +164,8 @@ void GameEngine::GameLoop()
             {
                 if (!controller.cross_pressed[0])
                 {
-                    sound.PlaySFX(&snd, 0, 0xA1BA);
+                    sound.PlaySFX(&snd, 2, 0xA1BA);
+                    player.SpawnEgg();
                     controller.cross_pressed[0] = true;
                 }
             }
@@ -319,7 +326,8 @@ void GameEngine::GameLoop()
             {
                 if (!controller.cross_pressed[0])
                 {
-                    sound.PlaySFX(&snd, 0, 0xA1BA);
+                    sound.PlaySFX(&snd, 2, 0xA1BA);
+                    player.SpawnEgg();
                     controller.cross_pressed[0] = true;
                 }
             }
@@ -463,7 +471,8 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.cross_pressed[0])
                         {
-                            sound.PlaySFX(&snd, 0, 0xA1BA);
+                            sound.PlaySFX(&snd, 2, 0xA1BA);
+                            player.SpawnEgg();
                             controller.cross_pressed[0] = true;
                         }
                     }
@@ -624,7 +633,8 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.cross_pressed[0])
                         {
-                            sound.PlaySFX(&snd, 0, 0xA1BA);
+                            sound.PlaySFX(&snd, 2, 0xA1BA);
+                            player.SpawnEgg();
                             controller.cross_pressed[0] = true;
                         }
                     }
@@ -769,7 +779,8 @@ void GameEngine::GameLoop()
             {
                 if (!controller.cross_pressed[1])
                 {
-                    sound.PlaySFX(&snd, 0, 0xA1BA);
+                    sound.PlaySFX(&snd, 2, 0xA1BA);
+                    player2.SpawnEgg();
                     controller.cross_pressed[1] = true;
                 }
             }
@@ -930,7 +941,8 @@ void GameEngine::GameLoop()
             {
                 if (!controller.cross_pressed[1])
                 {
-                    sound.PlaySFX(&snd, 0, 0xA1BA);
+                    sound.PlaySFX(&snd, 2, 0xA1BA);
+                    player2.SpawnEgg();
                     controller.cross_pressed[1] = true;
                 }
             }
@@ -1074,7 +1086,8 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.cross_pressed[1])
                         {
-                            sound.PlaySFX(&snd, 0, 0xA1BA);
+                            sound.PlaySFX(&snd, 2, 0xA1BA);
+                            player2.SpawnEgg();
                             controller.cross_pressed[1] = true;
                         }
                     }
@@ -1235,7 +1248,8 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.cross_pressed[1])
                         {
-                            sound.PlaySFX(&snd, 0, 0xA1BA);
+                            sound.PlaySFX(&snd, 2, 0xA1BA);
+                            player2.SpawnEgg();
                             controller.cross_pressed[1] = true;
                         }
                     }
@@ -1306,6 +1320,9 @@ void GameEngine::GameLoop()
             }
         }
     }
+
+    graph.nextpri = player.DrawEggs(graph.ot[graph.db],graph.nextpri,graph.ResW,graph.ResH);
+    graph.nextpri = player2.DrawEggs(graph.ot[graph.db],graph.nextpri,graph.ResW,graph.ResH);
 
     if (player.x < 0)
     {

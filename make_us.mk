@@ -11,6 +11,7 @@ sound.cpp \
 memcard.cpp \
 controller.cpp \
 player.cpp \
+egg.cpp \
 region_us.cpp \
 ../third_party/common/syscalls/printf.s \
 ../third_party/common/crt0/crt0.s \

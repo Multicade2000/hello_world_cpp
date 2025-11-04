@@ -1,25 +1,21 @@
 #include <sys/types.h>
 #include <stdio.h>
-#define _WCHAR_T
-#include <stdlib.h>
 #include <libapi.h>
 #include <libetc.h>
 #include <libgte.h>
 #include <libgpu.h>
-#include "egg.hpp"
 
-class Player
-{
+class Egg {
 public:
     int x;
     int y;
 
-    Player();
-    ~Player();
+    Egg* next;
 
-    Egg *eggs;
+    Egg();
+    ~Egg();
 
     char *DrawSprite(u_long *ot, char *pri);
-    void SpawnEgg();
-    char *DrawEggs(u_long *ot, char *pri, int ResW, int ResH);
+    bool IsOffScreen(int ResW, int ResH);
+    void Update();
 };

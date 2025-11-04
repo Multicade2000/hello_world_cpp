@@ -9,6 +9,8 @@ GameSound::GameSound()
         mus_tick[i] = 0;
         curPos[i] = 0;
     }
+
+    muser = nullptr;
 }
 
 GameSound::~GameSound()
@@ -176,6 +178,7 @@ void GameSound::StopMusic()
         chan_loop[i] = 0;
     }
     free(muser);
+    muser = nullptr;
 }
 
 long GameSound::ProcessMusic()
