@@ -5,7 +5,7 @@
 #include <libgte.h>
 #include <libgpu.h>
 
-#define OTLEN 512
+#define OTLEN 4096
 
 class GameGraph
 {

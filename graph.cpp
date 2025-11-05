@@ -17,6 +17,10 @@ void GameGraph::GraphInit()
 {
     ResetGraph(0);
 
+    InitGeom();
+    SetGeomOffset(ResW/2, ResH/2);
+    SetGeomScreen(ResW/2);
+
     ClearVRAM();
 
     if (pal_mode)

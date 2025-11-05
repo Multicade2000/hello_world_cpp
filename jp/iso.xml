@@ -29,6 +29,10 @@
                         <file name="MUSBOX.VAG" type="data" source="../data/mus/inst/musBox.vag"/>
                     </dir>
                 </dir>
+                <dir name="MDL">
+                    <file name="CRYSTAL.TIM" type="data" source="../data/mdl/crystal.tim"/>
+                    <file name="CRYSTAL.TMD" type="data" source="../data/mdl/crystal.tmd"/>
+                </dir>
                 <dir name="XA">
                     <file name="SPEECH.XA" type="xa" source="../data/xa/speech.xa"/>
                 </dir>

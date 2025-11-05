@@ -10,6 +10,7 @@ GameEngine::GameEngine()
     controller = GameController();
     player = Player();
     player2 = Player();
+    scrystal = SigmaCrystal();
     memcard = GameSave();
 }
 
@@ -59,6 +60,20 @@ void GameEngine::GameLoadStuff()
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\INST\\MUSBOX.VAG;1")))
     {
         sound.mus[0].spu_address = sound.SetSPUtransfer(&sound.mus[0],file);
+
+        free(file);
+    }
+
+    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MDL\\CRYSTAL.TIM;1")))
+    {
+        graph.LoadTexture(file);
+
+        free(file);
+    }
+
+    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MDL\\CRYSTAL.TMD;1")))
+    {
+        scrystal.PrepareModel(file);
 
         free(file);
     }
@@ -1433,6 +1448,8 @@ void GameEngine::GameLoop()
 
     graph.nextpri = player.DrawEggs(graph.ot[graph.db], graph.nextpri, graph.ResW, graph.ResH);
     graph.nextpri = player2.DrawEggs(graph.ot[graph.db], graph.nextpri, graph.ResW, graph.ResH);
+
+    graph.nextpri = scrystal.DrawModel(graph.ot[graph.db],graph.nextpri, OTLEN);
 
     if (player.x < 0)
     {

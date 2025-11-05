@@ -5,6 +5,7 @@
 #include "controller.hpp"
 #include "memcard.hpp"
 #include "player.hpp"
+#include "scrystal.hpp"
 
 class GameEngine
 {
@@ -17,6 +18,7 @@ public:
     GameSound sound;
     GameCDROM cdrom;
     GameController controller;
+    SigmaCrystal scrystal;
     Player player;
     Player player2;
     GameSave memcard;
