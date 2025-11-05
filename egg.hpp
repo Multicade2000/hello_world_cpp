@@ -5,7 +5,8 @@
 #include <libgte.h>
 #include <libgpu.h>
 
-class Egg {
+class Egg
+{
 public:
     int x;
     int y;

@@ -17,6 +17,10 @@ void GameGraph::GraphInit()
 {
     ResetGraph(0);
 
+    InitGeom();
+    SetGeomOffset(ResW/2, ResH/2);
+    SetGeomScreen(ResW/2);
+
     ClearVRAM();
 
     if (pal_mode)
@@ -82,7 +86,7 @@ void GameGraph::GraphDisp()
 
     SetDispMask(1);
 
-    DrawOTag(ot[db]+OTLEN-1);
+    DrawOTag(&ot[db][OTLEN-1]);
     
     db = !db;
     nextpri = pribuff[db];
