@@ -13,6 +13,7 @@ class Player
 public:
     int x;
     int y;
+    int port;
 
     Player();
     ~Player();

@@ -8,6 +8,7 @@ GameEngine::GameEngine()
     sound = GameSound();
     GameSound::instance = &sound;
     controller = GameController();
+    GameController::instance = &controller;
     player = Player();
     player2 = Player();
     scrystal = SigmaCrystal();
@@ -31,6 +32,11 @@ void GameEngine::GameInit()
 
 void GameEngine::GameLoadStuff()
 {
+    cdrom.CDROM_PlayMovie("\\DATA\\MOV\\LOGO.STR;1",240,(region.REGION_CODE == 0),true);
+
+    graph.GraphInit();
+    graph.ClearVRAM();
+
     u_long *file;
 
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\SPRT\\BIRD.TIM;1")))

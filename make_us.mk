@@ -10,6 +10,7 @@ cdrom.cpp \
 sound.cpp \
 memcard.cpp \
 controller.cpp \
+movie.cpp \
 player.cpp \
 egg.cpp \
 scrystal.cpp \
@@ -27,7 +28,6 @@ LDFLAGS += -Wl,--start-group
 LDFLAGS += -lapi
 LDFLAGS += -lc
 LDFLAGS += -lc2
-LDFLAGS += -lcd
 LDFLAGS += -lcard
 LDFLAGS += -lcomb
 LDFLAGS += -lds
@@ -47,6 +47,7 @@ LDFLAGS += -lsio
 LDFLAGS += -lsnd
 LDFLAGS += -lspu
 LDFLAGS += -ltap
+LDFLAGS += -lcd
 LDFLAGS += -Wl,--end-group
 
 include ../third_party/common.mk

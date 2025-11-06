@@ -16,6 +16,7 @@ GameGraph::~GameGraph()
 void GameGraph::GraphInit()
 {
     ResetGraph(0);
+    SetDispMask(0);
 
     InitGeom();
     SetGeomOffset(ResW/2, ResH/2);
@@ -27,6 +28,8 @@ void GameGraph::GraphInit()
     {
         ResH = ResH > 256 ? 512 : 256;
     }
+
+    SetDispMask(0);
 
     SetDefDispEnv(&disp[0],0,0,ResW,ResH);
     SetDefDispEnv(&disp[1],0,(ResH > 256 ? 0 : ResH),ResW,ResH);

@@ -24,6 +24,7 @@
 class GameController
 {
 public:
+
     u_char padbuff[2][34];
     u_char align[6];
     u_char motor[2][2];
@@ -47,4 +48,6 @@ public:
     u_char CheckStick(int port, int stick);
 
     void LoopVibrator(int port);
+    
+    static GameController* instance;
 };

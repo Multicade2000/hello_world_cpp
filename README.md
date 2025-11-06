@@ -3,6 +3,7 @@ A Hello World written in C++
 
 # Witness, the super high interlaced resolution!
 Running at 512x480/512x512 resolution is fantastic!
+The hardware can also handle drawing 3D graphics in such resolution too!
 
 # Pay attention to the sound system!
 It can play sound effects in any pitch!
@@ -13,6 +14,7 @@ Finally, we have music on our fun's side! Reading .MUS (Because .SEQ requires <l
 # Behold, the CDRead() feature!
 Reading stuff from CD instead of EXE is better way to improve your future games!
 The program can also read .XA files in exact length! (If well calculated...)
+The program can now read .STR videos (once only)
 
 # Feel the controllers!
 The support with MultiTap and vibration!

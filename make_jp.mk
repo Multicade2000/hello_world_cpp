@@ -10,6 +10,7 @@ cdrom.cpp \
 sound.cpp \
 memcard.cpp \
 controller.cpp \
+movie.cpp \
 player.cpp \
 egg.cpp \
 scrystal.cpp \

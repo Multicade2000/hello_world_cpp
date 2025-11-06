@@ -1,5 +1,7 @@
 #include "controller.hpp"
 
+GameController *GameController::instance = nullptr;
+
 GameController::GameController()
 {
     align[0] = 0;
@@ -37,14 +39,14 @@ GameController::~GameController()
 
 void GameController::ControllerInit()
 {
-    PadInitMtap(padbuff[0], padbuff[1]);
+    PadInitMtap(instance->padbuff[0], instance->padbuff[1]);
     PadStartCom();
 }
 
 int GameController::IsConnected(int port)
 {
-    u_char *buff = padbuff[0];
-    u_char *buff2 = padbuff[1];
+    u_char *buff = instance->padbuff[0];
+    u_char *buff2 = instance->padbuff[1];
 
     if (port == 0x00)
     {
@@ -122,8 +124,8 @@ int GameController::IsConnected(int port)
 
 u_char GameController::CheckType(int port)
 {
-    u_char *buff = padbuff[0];
-    u_char *buff2 = padbuff[1];
+    u_char *buff = instance->padbuff[0];
+    u_char *buff2 = instance->padbuff[1];
 
     if (port == 0x00)
     {
@@ -220,8 +222,8 @@ u_short GameController::CheckButton(int port)
 
 u_char GameController::CheckStick(int port, int stick)
 {
-    u_char *buff = padbuff[0];
-    u_char *buff2 = padbuff[1];
+    u_char *buff = instance->padbuff[0];
+    u_char *buff2 = instance->padbuff[1];
 
     if (port == 0x00)
     {

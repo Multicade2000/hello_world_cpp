@@ -9,6 +9,9 @@ GameCDROM::GameCDROM()
     pos_end = 0;
     cur_pos = 0;
     doubleSpeed = false;
+
+    mov = Movie();
+    Movie::instance = &mov;
 }
 
 GameCDROM::~GameCDROM()
@@ -142,4 +145,9 @@ void GameCDROM::CDROM_Standby()
             cd_standby = true;
         }
     }
+}
+
+void GameCDROM::CDROM_PlayMovie(const char* filename, int frames, bool eu, bool dS)
+{
+    mov.PlayStr(filename, frames, eu, dS);
 }
