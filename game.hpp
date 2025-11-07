@@ -13,6 +13,8 @@ public:
     GameEngine();
     ~GameEngine();
 
+    TMD_PRIM *mdls;
+
     GameRegion region;
     GameGraph graph;
     GameSound sound;

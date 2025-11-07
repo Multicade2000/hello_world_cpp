@@ -47,6 +47,7 @@ void GameEngine::GameResetGarbage()
     free(&player);
     free(&player2);
     free(&scrystal);
+    free(mdls);
 
     player = Player();
     player2 = Player();
@@ -115,10 +116,13 @@ void GameEngine::GameLoadStuff()
 
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\MDL\\CRYSTAL.TMD;1")))
     {
-        scrystal.PrepareModel(file);
+        mdls = graph.LoadModel(file);
 
         free(file);
     }
+
+    scrystal.mdl = mdls;
+    scrystal.n_prim = sizeof(mdls)*2;
 
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\BACK\\BACK.TIM;1")))
     {
@@ -826,6 +830,11 @@ void GameEngine::GameLoop()
                     {
                         controller.save_pressed[0] = false;
                     }
+
+                    if (!(btn & PAD_L3) || !(btn & PAD_R3))
+                    {
+                        GameResetGarbage();
+                    }
                 }
             }
         }
@@ -1162,6 +1171,11 @@ void GameEngine::GameLoop()
             {
                 controller.save_pressed[1] = false;
             }
+
+            if (!(btn2 & PAD_L3) || !(btn2 & PAD_R3))
+            {
+                GameResetGarbage();
+            }
         }
         else if (controller.CheckType(0x01) == 0x8)
         {
@@ -1496,6 +1510,11 @@ void GameEngine::GameLoop()
                     else
                     {
                         controller.save_pressed[1] = false;
+                    }
+
+                    if (!(btn2 & PAD_L3) || !(btn2 & PAD_R3))
+                    {
+                        GameResetGarbage();
                     }
                 }
             }

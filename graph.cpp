@@ -150,3 +150,16 @@ void GameGraph::DrawBack()
         }
     }
 }
+
+TMD_PRIM *GameGraph::LoadModel(u_long *mdl)
+{
+    int n_prim = OpenTMD(mdl, 0);
+    TMD_PRIM *dump = (TMD_PRIM *)malloc(n_prim * sizeof(TMD_PRIM));
+    TMD_PRIM tmd;
+    for (int i = 0; i < n_prim && ReadTMD(&tmd) != 0; i++)
+    {
+        dump[i] = tmd;
+    }
+
+    return dump;
+}

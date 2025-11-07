@@ -22,6 +22,5 @@ public:
     VECTOR Scale;
     MATRIX Matrix;
 
-    void PrepareModel(u_long *file);
     char *DrawModel(u_long *ot, char *pri, int max_ot);
 };

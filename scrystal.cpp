@@ -16,17 +16,6 @@ SigmaCrystal::~SigmaCrystal()
     free(mdl);
 }
 
-void SigmaCrystal::PrepareModel(u_long *file)
-{
-    n_prim = OpenTMD(file, 0);
-    mdl = (TMD_PRIM *)malloc(n_prim * sizeof(TMD_PRIM));
-    TMD_PRIM tmd;
-    for (int i = 0; i < n_prim && ReadTMD(&tmd) != 0; i++)
-    {
-        mdl[i] = tmd;
-    }
-}
-
 char *SigmaCrystal::DrawModel(u_long *ot, char *pri, int max_ot)
 {
     long p, OTz, Flag;

@@ -1,5 +1,7 @@
 #include <sys/types.h>
 #include <stdio.h>
+#define _WCHAR_T
+#include <stdlib.h>
 #include <libapi.h>
 #include <libetc.h>
 #include <libgte.h>
@@ -27,6 +29,7 @@ public:
 
     void GraphInit();
     void LoadTexture(u_long *tim);
+    TMD_PRIM *LoadModel(u_long *mdl);
     void DrawBack();
     void GraphDisp();
 
