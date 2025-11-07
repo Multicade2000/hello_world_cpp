@@ -25,7 +25,7 @@ void GameSound::SoundInit()
     SpuCommonAttr commonAttributes;
     SpuInit();
     SpuInitMalloc(MALLOC_MAX, spu_malloc_rec);
-    SpuWrite0(0xFFFF);
+    SpuWrite0(0xFFFFFF);
     commonAttributes.mask = (SPU_COMMON_MVOLL | SPU_COMMON_MVOLR | SPU_COMMON_CDVOLL | SPU_COMMON_CDVOLR | SPU_COMMON_CDMIX);
     commonAttributes.mvol.left = 0x3fff;
     commonAttributes.mvol.right = 0x3fff;

@@ -4,11 +4,13 @@ Egg::Egg()
 {
     x = 0;
     y = 0;
+
+    next = nullptr;
 }
 
 Egg::~Egg()
 {
-
+    free(next);
 }
 
 char *Egg::DrawSprite(u_long *ot, char *pri)

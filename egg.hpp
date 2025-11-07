@@ -1,5 +1,7 @@
 #include <sys/types.h>
 #include <stdio.h>
+#define _WCHAR_T
+#include <stdlib.h>
 #include <libapi.h>
 #include <libetc.h>
 #include <libgte.h>

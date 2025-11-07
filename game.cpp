@@ -1,5 +1,7 @@
 #include "game.hpp"
 
+static unsigned char ramAddr[0x40000];
+
 GameEngine::GameEngine()
 {
     region = GameRegion();
@@ -28,13 +30,47 @@ void GameEngine::GameInit()
     cdrom.CDROM_Init();
     memcard.MemCard_Init();
     controller.ControllerInit();
+
+	InitHeap((u_long *)ramAddr, sizeof(ramAddr));
+}
+
+void GameEngine::GameResetGarbage()
+{
+    cdrom.CDROM_XAStop();
+    sound.StopMusic();
+    graph.ClearVRAM();
+
+    scrystal.~SigmaCrystal();
+    player.~Player();
+    player2.~Player();
+
+    free(&player);
+    free(&player2);
+    free(&scrystal);
+
+    player = Player();
+    player2 = Player();
+    scrystal = SigmaCrystal();
+
+    SpuFree(snd.spu_address);
+
+    for (int i = 0; i < 255; i++)
+    {
+        SpuFree(sound.mus[0].spu_address);
+    }
+
+    SpuInitMalloc(MALLOC_MAX, sound.spu_malloc_rec);
+    SpuWrite0(0xFFFF);
+
+	InitHeap((u_long *)ramAddr, sizeof(ramAddr));
+
+    GameLoadStuff();
 }
 
 void GameEngine::GameLoadStuff()
 {
     cdrom.CDROM_PlayMovie("\\DATA\\MOV\\LOGO.STR;1",240,(region.REGION_CODE == 0),true);
 
-    graph.GraphInit();
     graph.ClearVRAM();
 
     u_long *file;
@@ -84,6 +120,13 @@ void GameEngine::GameLoadStuff()
         free(file);
     }
 
+    if ((file = cdrom.CDROM_ReadFile("\\DATA\\BACK\\BACK.TIM;1")))
+    {
+        graph.LoadTexture(file);
+
+        free(file);
+    }
+
     // if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
     // {
     //     memcard.PrepareHeader(file);
@@ -105,6 +148,8 @@ void GameEngine::GameLoop()
     // FntFlush(-1);
 
     graph.CleanOT();
+
+    graph.DrawBack();
 
     controller.LoopVibrator(0x00);
     controller.LoopVibrator(0x10);
@@ -440,6 +485,11 @@ void GameEngine::GameLoop()
             else
             {
                 controller.save_pressed[0] = false;
+            }
+
+            if (!(btn & PAD_L3) || !(btn & PAD_R3))
+            {
+                GameResetGarbage();
             }
         }
         else if (controller.CheckType(0x00) == 0x8)

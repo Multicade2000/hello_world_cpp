@@ -30,4 +30,5 @@ public:
     void GameInit();
     void GameLoadStuff();
     void GameLoop();
+    void GameResetGarbage();
 };

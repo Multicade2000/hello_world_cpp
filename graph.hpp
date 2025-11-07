@@ -27,6 +27,7 @@ public:
 
     void GraphInit();
     void LoadTexture(u_long *tim);
+    void DrawBack();
     void GraphDisp();
 
     void CleanOT();

@@ -20,6 +20,9 @@
                     <file name="BIRD.TIM"    type="data"    source="../data/sprt/bird.tim"/>
                     <file name="EGG.TIM"    type="data"    source="../data/sprt/egg.tim"/>
                 </dir>
+                <dir name="BACK">
+                    <file name="BACK.TIM"    type="data"    source="../data/back/back_ntsc.tim"/>
+                </dir>
                 <dir name="SND">
                     <file name="JUMP.VAG"    type="data"    source="../data/snd/jump.vag"/>
                 </dir>
