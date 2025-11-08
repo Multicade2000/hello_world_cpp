@@ -52,6 +52,8 @@ public:
     bool chan_start[12];
     bool chan_stop[12];
 
+    bool mus_playing = false;
+
     int stopper;
 
     int max_channels;
@@ -73,5 +75,6 @@ public:
     void LoadMusic(u_long *file, int size, int max_chans);
     void PlayMusic();
     void StopMusic();
+    void ClearMusic();
     static long ProcessMusic();
 };
