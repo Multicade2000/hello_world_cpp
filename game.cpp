@@ -262,7 +262,7 @@ void GameEngine::GameLoop()
                     u_long *file;
                     if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
                     {
-                        sound.LoadMusic(file, 14, 2);
+                        sound.LoadMusic(file, 16, 2);
                         sound.PlayMusic();
                         free(file);
                     }
@@ -457,7 +457,7 @@ void GameEngine::GameLoop()
                     u_long *file;
                     if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
                     {
-                        sound.LoadMusic(file, 14, 2);
+                        sound.LoadMusic(file, 16, 2);
                         sound.PlayMusic();
                         free(file);
                     }
@@ -623,7 +623,7 @@ void GameEngine::GameLoop()
                             u_long *file;
                             if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
                             {
-                                sound.LoadMusic(file, 14, 2);
+                                sound.LoadMusic(file, 16, 2);
                                 sound.PlayMusic();
                                 free(file);
                             }
@@ -818,7 +818,7 @@ void GameEngine::GameLoop()
                             u_long *file;
                             if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
                             {
-                                sound.LoadMusic(file, 14, 2);
+                                sound.LoadMusic(file, 16, 2);
                                 sound.PlayMusic();
                                 free(file);
                             }
@@ -985,7 +985,7 @@ void GameEngine::GameLoop()
                     u_long *file;
                     if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
                     {
-                        sound.LoadMusic(file, 14, 2);
+                        sound.LoadMusic(file, 16, 2);
                         sound.PlayMusic();
                         free(file);
                     }
@@ -1180,7 +1180,7 @@ void GameEngine::GameLoop()
                     u_long *file;
                     if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
                     {
-                        sound.LoadMusic(file, 14, 2);
+                        sound.LoadMusic(file, 16, 2);
                         sound.PlayMusic();
                         free(file);
                     }
@@ -1346,7 +1346,7 @@ void GameEngine::GameLoop()
                             u_long *file;
                             if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
                             {
-                                sound.LoadMusic(file, 14, 2);
+                                sound.LoadMusic(file, 16, 2);
                                 sound.PlayMusic();
                                 free(file);
                             }
@@ -1541,7 +1541,7 @@ void GameEngine::GameLoop()
                             u_long *file;
                             if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
                             {
-                                sound.LoadMusic(file, 14, 2);
+                                sound.LoadMusic(file, 16, 2);
                                 sound.PlayMusic();
                                 free(file);
                             }

@@ -50,6 +50,7 @@ public:
     int chan_ofs[12];
     int chan_loop[12];
     bool chan_start[12];
+    bool chan_stop[12];
 
     int stopper;
 

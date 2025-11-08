@@ -8,6 +8,8 @@ GameSound::GameSound()
     {
         mus_tick[i] = 0;
         curPos[i] = 0;
+        chan_loop[i] = true;
+        chan_stop[i] = false;
     }
 
     stopper = 0;
@@ -17,7 +19,7 @@ GameSound::GameSound()
 
 GameSound::~GameSound()
 {
-    
+
 }
 
 void GameSound::SoundInit()
@@ -156,6 +158,7 @@ void GameSound::LoadMusic(u_long *file, int size, int max_chans)
 
 void GameSound::PlayMusic()
 {
+    instance->stopper = 0;
     ResetRCnt(RCntCNT1);
     SetRCnt(RCntCNT1, 125, RCntMdINTR);
     StartRCnt(RCntCNT1);
@@ -178,6 +181,7 @@ void GameSound::StopMusic()
             chan_ofs[i] = 0;
             chan_start[i] = false;
             chan_loop[i] = 0;
+            chan_stop[i] = false;
             VSync(0);
         }
         free(muser);
@@ -193,17 +197,26 @@ long GameSound::ProcessMusic()
         {
             if (instance->mus_tick[i] < instance->muser[instance->chan_ofs[i] + instance->curPos[i]].time)
             {
-                if (instance->mus_tick[i] == 0)
+                if (instance->mus_tick[i] == 0 && instance->muser[instance->chan_ofs[i] + instance->curPos[i]].sampleid != 0xFF && !instance->chan_stop[i])
                 {
                     instance->PlaySFX(&instance->mus[instance->muser[instance->chan_ofs[i] + instance->curPos[i]].sampleid], instance->muser[instance->chan_ofs[i] + instance->curPos[i]].channel, instance->muser[instance->chan_ofs[i] + instance->curPos[i]].note_key);
                 }
-                instance->mus_tick[i]++;
+
+                if (!instance->chan_stop[i] && instance->stopper == i)
+                {
+                    instance->chan_stop[i] = true;
+                }
+                else
+                {
+                    instance->mus_tick[i]++;
+                }
             }
             else
             {
                 if (i == instance->stopper)
                 {
                     instance->StopSFX(instance->muser[instance->chan_ofs[i] + instance->curPos[i]].channel);
+                    instance->chan_stop[i] = false;
                 }
                 instance->mus_tick[i] = 0;
                 if (instance->muser[instance->chan_ofs[i] + instance->curPos[i]].loopEnd == 0x01)
@@ -220,15 +233,15 @@ long GameSound::ProcessMusic()
                 }
             }
         }
-    }
 
-    if (instance->stopper < instance->max_channels - 1)
-    {
-        instance->stopper++;
-    }
-    else
-    {
-        instance->stopper = 0;
+        if (instance->stopper < instance->max_channels - 1)
+        {
+            instance->stopper++;
+        }
+        else
+        {
+            instance->stopper = 0;
+        }
     }
 
     SetRCnt(RCntCNT1, 125, RCntMdINTR);

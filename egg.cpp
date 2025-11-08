@@ -30,6 +30,8 @@ char *Egg::DrawSprite(u_long *ot, char *pri, int max_ot)
     long polydepth;
     long polyflag;
 
+    long OTz;
+
     MovVector.vx = x-248;
     MovVector.vy = y-224;
 
@@ -48,17 +50,17 @@ char *Egg::DrawSprite(u_long *ot, char *pri, int max_ot)
 
     setRGB0(poly, 128, 128, 128);
         
-    long OTz = RotTransPers4(
-        &VertPos[0],      &VertPos[1],      &VertPos[2],      &VertPos[3],
-        (long*)&poly->x0, (long*)&poly->x1, (long*)&poly->x2, (long*)&poly->x3,
-        &polydepth,
-        &polyflag
-    );
+    OTz = RotTransPers(&VertPos[0], (long *)&poly->x0, &polydepth, &polyflag);
+    OTz += RotTransPers(&VertPos[1], (long *)&poly->x1, &polydepth, &polyflag);
+    OTz += RotTransPers(&VertPos[2], (long *)&poly->x2, &polydepth, &polyflag);
+    OTz += RotTransPers(&VertPos[3], (long *)&poly->x3, &polydepth, &polyflag);
+
+    OTz /= 4;
         
     setUV4(poly, 0, 64, 0, 64+24, 16, 64, 16, 64+24);
 
     if ((OTz > 0) && (OTz < max_ot))
-        addPrim(ot, poly);
+        addPrim(ot[OTz-3], poly);
         
     return pri+sizeof(POLY_FT4);
 
