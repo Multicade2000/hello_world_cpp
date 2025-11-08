@@ -16,6 +16,9 @@ public:
     TMD_PRIM *mdl;
     int n_prim;
 
+    bool laugh;
+    int laugh_tick;
+
     SVECTOR Rotate;
     VECTOR Trans;
 

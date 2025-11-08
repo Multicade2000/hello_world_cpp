@@ -9,6 +9,9 @@ SigmaCrystal::SigmaCrystal()
 
     Scale = {ONE / 2, ONE / 2, ONE / 2, 0};
     Matrix = {0};
+
+    laugh = false;
+    laugh_tick = 0;
 }
 
 SigmaCrystal::~SigmaCrystal()
@@ -33,12 +36,26 @@ char *SigmaCrystal::DrawModel(u_long *ot, char *pri, int max_ot)
         POLY_GT3 *poly = (POLY_GT3 *)pri;
 
         SetPolyGT3(poly);
-        poly->tpage = mdl[i].tpage;
-        poly->clut = mdl[i].clut;
+        poly->tpage = getTPage(0,0,576,0);
+        if (!laugh)
+        {
+            poly->clut = getClut(512,450);
+        }
+        else
+        {
+            poly->clut = getClut(512,452);
+        }
         setRGB0(poly, 128, 128, 128);
         setRGB1(poly, 128, 128, 128);
         setRGB2(poly, 128, 128, 128);
-        setUV3(poly, mdl[i].u0, mdl[i].v0, mdl[i].u1, mdl[i].v1, mdl[i].u2, mdl[i].v2);
+        if (laugh)
+        {
+            setUV3(poly, mdl[i].u0, mdl[i].v0+64, mdl[i].u1, mdl[i].v1+64, mdl[i].u2, mdl[i].v2+64);
+        }
+        else
+        {
+            setUV3(poly, mdl[i].u0, mdl[i].v0, mdl[i].u1, mdl[i].v1, mdl[i].u2, mdl[i].v2);
+        }
 
         OTz = RotTransPers(&mdl[i].x0, (long *)&poly->x0, &p, &Flag);
         OTz += RotTransPers(&mdl[i].x1, (long *)&poly->x1, &p, &Flag);
@@ -48,6 +65,16 @@ char *SigmaCrystal::DrawModel(u_long *ot, char *pri, int max_ot)
         if ((OTz > 0) && (OTz < max_ot))
             AddPrim(&ot[OTz - 2], poly);
         pri += sizeof(POLY_GT3);
+    }
+
+    if (laugh_tick >= 20)
+    {
+        laugh = !laugh;
+        laugh_tick = 0;
+    }
+    else
+    {
+        laugh_tick++;
     }
 
     return pri;

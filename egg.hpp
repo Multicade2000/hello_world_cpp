@@ -13,12 +13,21 @@ public:
     int x;
     int y;
 
+    int speed_y;
+
     Egg* next;
 
     Egg();
     ~Egg();
 
-    char *DrawSprite(u_long *ot, char *pri);
+    SVECTOR RotVector;
+    VECTOR  MovVector;
+    VECTOR  ScaleVector;
+    
+    SVECTOR VertPos[4];                                         
+    MATRIX PolyMatrix;
+
+    char *DrawSprite(u_long *ot, char *pri, int max_ot);
     bool IsOffScreen(int ResW, int ResH);
     void Update();
 };

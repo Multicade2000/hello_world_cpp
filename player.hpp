@@ -13,14 +13,22 @@ class Player
 public:
     int x;
     int y;
-    int port;
+
+    bool p2;
 
     Player();
     ~Player();
 
+    SVECTOR RotVector;
+    VECTOR  MovVector;
+    VECTOR  ScaleVector;
+    
+    SVECTOR VertPos[4];                                         
+    MATRIX PolyMatrix;
+
     Egg *eggs;
 
-    char *DrawSprite(u_long *ot, char *pri);
-    void SpawnEgg();
-    char *DrawEggs(u_long *ot, char *pri, int ResW, int ResH);
+    char *DrawSprite(u_long *ot, char *pri, int max_ot);
+    void SpawnEgg(int speed_y);
+    char *DrawEggs(u_long *ot, char *pri, int max_ot, int ResW, int ResH);
 };

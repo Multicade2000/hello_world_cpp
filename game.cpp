@@ -13,13 +13,14 @@ GameEngine::GameEngine()
     GameController::instance = &controller;
     player = Player();
     player2 = Player();
+    player2.p2 = true;
     scrystal = SigmaCrystal();
     memcard = GameSave();
 }
 
 GameEngine::~GameEngine()
 {
-    
+
 }
 
 void GameEngine::GameInit()
@@ -31,7 +32,7 @@ void GameEngine::GameInit()
     memcard.MemCard_Init();
     controller.ControllerInit();
 
-	InitHeap((u_long *)ramAddr, sizeof(ramAddr));
+    InitHeap((u_long *)ramAddr, sizeof(ramAddr));
 }
 
 void GameEngine::GameResetGarbage()
@@ -51,6 +52,7 @@ void GameEngine::GameResetGarbage()
 
     player = Player();
     player2 = Player();
+    player2.p2 = true;
     scrystal = SigmaCrystal();
 
     SpuFree(snd.spu_address);
@@ -63,14 +65,14 @@ void GameEngine::GameResetGarbage()
     SpuInitMalloc(MALLOC_MAX, sound.spu_malloc_rec);
     SpuWrite0(0xFFFF);
 
-	InitHeap((u_long *)ramAddr, sizeof(ramAddr));
+    InitHeap((u_long *)ramAddr, sizeof(ramAddr));
 
     GameLoadStuff();
 }
 
 void GameEngine::GameLoadStuff()
 {
-    cdrom.CDROM_PlayMovie("\\DATA\\MOV\\LOGO.STR;1",240,(region.REGION_CODE == 0),true);
+    cdrom.CDROM_PlayMovie("\\DATA\\MOV\\LOGO.STR;1", 240, (region.REGION_CODE == 0), true);
 
     graph.ClearVRAM();
 
@@ -86,6 +88,7 @@ void GameEngine::GameLoadStuff()
     // {
     //     failed = true;
     // }
+    
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\SPRT\\EGG.TIM;1")))
     {
         graph.LoadTexture(file);
@@ -102,12 +105,19 @@ void GameEngine::GameLoadStuff()
 
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\INST\\MUSBOX.VAG;1")))
     {
-        sound.mus[0].spu_address = sound.SetSPUtransfer(&sound.mus[0],file);
+        sound.mus[0].spu_address = sound.SetSPUtransfer(&sound.mus[0], file);
 
         free(file);
     }
 
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\MDL\\CRYSTAL.TIM;1")))
+    {
+        graph.LoadTexture(file);
+
+        free(file);
+    }
+
+    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MDL\\CRYSTAL2.TIM;1")))
     {
         graph.LoadTexture(file);
 
@@ -122,7 +132,7 @@ void GameEngine::GameLoadStuff()
     }
 
     scrystal.mdl = mdls;
-    scrystal.n_prim = sizeof(mdls)*2;
+    scrystal.n_prim = sizeof(mdls) * 2;
 
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\BACK\\BACK.TIM;1")))
     {
@@ -162,7 +172,7 @@ void GameEngine::GameLoop()
     {
         if (controller.CheckType(0x00) == 0x4)
         {
-            graph.nextpri = player.DrawSprite(graph.ot[graph.db], graph.nextpri);
+            graph.nextpri = player.DrawSprite(graph.ot[graph.db], graph.nextpri, OTLEN);
 
             u_short btn = controller.CheckButton(0x00);
 
@@ -233,7 +243,9 @@ void GameEngine::GameLoop()
                 if (!controller.cross_pressed[0])
                 {
                     sound.PlaySFX(&snd, 2, 0xA1BA);
-                    player.SpawnEgg();
+                    player.SpawnEgg(-2);
+                    player.SpawnEgg(0);
+                    player.SpawnEgg(2);
                     controller.cross_pressed[0] = true;
                 }
             }
@@ -317,13 +329,30 @@ void GameEngine::GameLoop()
         }
         else if (controller.CheckType(0x00) == 0x7)
         {
-            graph.nextpri = player.DrawSprite(graph.ot[graph.db], graph.nextpri);
+            graph.nextpri = player.DrawSprite(graph.ot[graph.db], graph.nextpri, OTLEN);
 
             u_short btn = controller.CheckButton(0x00);
             int rs_x = (int)controller.CheckStick(0x00, 0) - 127;
             int rs_y = (int)controller.CheckStick(0x00, 1) - 127;
             int ls_x = (int)controller.CheckStick(0x00, 2) - 127;
             int ls_y = (int)controller.CheckStick(0x00, 3) - 127;
+
+            if (rs_y < -15)
+            {
+                player.ScaleVector.vy = -ONE;
+            }
+            if (rs_y > 15)
+            {
+                player.ScaleVector.vy = ONE;
+            }
+            if (rs_x < -15)
+            {
+                player.ScaleVector.vx = -ONE;
+            }
+            if (rs_x > 15)
+            {
+                player.ScaleVector.vx = ONE;
+            }
 
             if (ls_y < -15)
             {
@@ -409,7 +438,9 @@ void GameEngine::GameLoop()
                 if (!controller.cross_pressed[0])
                 {
                     sound.PlaySFX(&snd, 2, 0xA1BA);
-                    player.SpawnEgg();
+                    player.SpawnEgg(-2);
+                    player.SpawnEgg(0);
+                    player.SpawnEgg(2);
                     controller.cross_pressed[0] = true;
                 }
             }
@@ -502,7 +533,7 @@ void GameEngine::GameLoop()
             {
                 if (controller.CheckType(0x10) == 0x4)
                 {
-                    graph.nextpri = player.DrawSprite(graph.ot[graph.db], graph.nextpri);
+                    graph.nextpri = player.DrawSprite(graph.ot[graph.db], graph.nextpri, OTLEN);
 
                     u_short btn = controller.CheckButton(0x10);
 
@@ -573,7 +604,9 @@ void GameEngine::GameLoop()
                         if (!controller.cross_pressed[0])
                         {
                             sound.PlaySFX(&snd, 2, 0xA1BA);
-                            player.SpawnEgg();
+                            player.SpawnEgg(-2);
+                            player.SpawnEgg(0);
+                            player.SpawnEgg(2);
                             controller.cross_pressed[0] = true;
                         }
                     }
@@ -657,13 +690,30 @@ void GameEngine::GameLoop()
                 }
                 else if (controller.CheckType(0x10) == 0x7)
                 {
-                    graph.nextpri = player.DrawSprite(graph.ot[graph.db], graph.nextpri);
+                    graph.nextpri = player.DrawSprite(graph.ot[graph.db], graph.nextpri, OTLEN);
 
                     u_short btn = controller.CheckButton(0x10);
                     int rs_x = (int)controller.CheckStick(0x10, 0) - 127;
                     int rs_y = (int)controller.CheckStick(0x10, 1) - 127;
                     int ls_x = (int)controller.CheckStick(0x10, 2) - 127;
                     int ls_y = (int)controller.CheckStick(0x10, 3) - 127;
+
+                    if (rs_y < -15)
+                    {
+                        player.ScaleVector.vy = -ONE;
+                    }
+                    if (rs_y > 15)
+                    {
+                        player.ScaleVector.vy = ONE;
+                    }
+                    if (rs_x < -15)
+                    {
+                        player.ScaleVector.vx = -ONE;
+                    }
+                    if (rs_x > 15)
+                    {
+                        player.ScaleVector.vx = ONE;
+                    }
 
                     if (ls_y < -15)
                     {
@@ -749,7 +799,9 @@ void GameEngine::GameLoop()
                         if (!controller.cross_pressed[0])
                         {
                             sound.PlaySFX(&snd, 2, 0xA1BA);
-                            player.SpawnEgg();
+                            player.SpawnEgg(-2);
+                            player.SpawnEgg(0);
+                            player.SpawnEgg(2);
                             controller.cross_pressed[0] = true;
                         }
                     }
@@ -843,7 +895,7 @@ void GameEngine::GameLoop()
     {
         if (controller.CheckType(0x01) == 0x4)
         {
-            graph.nextpri = player2.DrawSprite(graph.ot[graph.db], graph.nextpri);
+            graph.nextpri = player2.DrawSprite(graph.ot[graph.db], graph.nextpri, OTLEN);
 
             u_short btn2 = controller.CheckButton(0x01);
 
@@ -914,7 +966,9 @@ void GameEngine::GameLoop()
                 if (!controller.cross_pressed[1])
                 {
                     sound.PlaySFX(&snd, 2, 0xA1BA);
-                    player2.SpawnEgg();
+                    player2.SpawnEgg(-2);
+                    player2.SpawnEgg(0);
+                    player2.SpawnEgg(2);
                     controller.cross_pressed[1] = true;
                 }
             }
@@ -998,13 +1052,30 @@ void GameEngine::GameLoop()
         }
         else if (controller.CheckType(0x01) == 0x7)
         {
-            graph.nextpri = player2.DrawSprite(graph.ot[graph.db], graph.nextpri);
+            graph.nextpri = player2.DrawSprite(graph.ot[graph.db], graph.nextpri, OTLEN);
 
             u_short btn2 = controller.CheckButton(0x01);
             int rs_x = (int)controller.CheckStick(0x01, 0) - 127;
             int rs_y = (int)controller.CheckStick(0x01, 1) - 127;
             int ls_x = (int)controller.CheckStick(0x01, 2) - 127;
             int ls_y = (int)controller.CheckStick(0x01, 3) - 127;
+
+            if (rs_y < -15)
+            {
+                player2.ScaleVector.vy = -ONE;
+            }
+            if (rs_y > 15)
+            {
+                player2.ScaleVector.vy = ONE;
+            }
+            if (rs_x < -15)
+            {
+                player2.ScaleVector.vx = -ONE;
+            }
+            if (rs_x > 15)
+            {
+                player2.ScaleVector.vx = ONE;
+            }
 
             if (ls_y < -15)
             {
@@ -1090,7 +1161,9 @@ void GameEngine::GameLoop()
                 if (!controller.cross_pressed[1])
                 {
                     sound.PlaySFX(&snd, 2, 0xA1BA);
-                    player2.SpawnEgg();
+                    player2.SpawnEgg(-2);
+                    player2.SpawnEgg(0);
+                    player2.SpawnEgg(2);
                     controller.cross_pressed[1] = true;
                 }
             }
@@ -1183,7 +1256,7 @@ void GameEngine::GameLoop()
             {
                 if (controller.CheckType(0x20) == 0x4)
                 {
-                    graph.nextpri = player2.DrawSprite(graph.ot[graph.db], graph.nextpri);
+                    graph.nextpri = player2.DrawSprite(graph.ot[graph.db], graph.nextpri, OTLEN);
 
                     u_short btn2 = controller.CheckButton(0x20);
 
@@ -1254,7 +1327,9 @@ void GameEngine::GameLoop()
                         if (!controller.cross_pressed[1])
                         {
                             sound.PlaySFX(&snd, 2, 0xA1BA);
-                            player2.SpawnEgg();
+                            player2.SpawnEgg(-2);
+                            player2.SpawnEgg(0);
+                            player2.SpawnEgg(2);
                             controller.cross_pressed[1] = true;
                         }
                     }
@@ -1338,13 +1413,30 @@ void GameEngine::GameLoop()
                 }
                 else if (controller.CheckType(0x20) == 0x7)
                 {
-                    graph.nextpri = player2.DrawSprite(graph.ot[graph.db], graph.nextpri);
+                    graph.nextpri = player2.DrawSprite(graph.ot[graph.db], graph.nextpri, OTLEN);
 
                     u_short btn2 = controller.CheckButton(0x20);
                     int rs_x = (int)controller.CheckStick(0x20, 0) - 127;
                     int rs_y = (int)controller.CheckStick(0x20, 1) - 127;
                     int ls_x = (int)controller.CheckStick(0x20, 2) - 127;
                     int ls_y = (int)controller.CheckStick(0x20, 3) - 127;
+
+                    if (rs_y < -15)
+                    {
+                        player2.ScaleVector.vy = -ONE;
+                    }
+                    if (rs_y > 15)
+                    {
+                        player2.ScaleVector.vy = ONE;
+                    }
+                    if (rs_x < -15)
+                    {
+                        player2.ScaleVector.vx = -ONE;
+                    }
+                    if (rs_x > 15)
+                    {
+                        player2.ScaleVector.vx = ONE;
+                    }
 
                     if (ls_y < -15)
                     {
@@ -1430,7 +1522,9 @@ void GameEngine::GameLoop()
                         if (!controller.cross_pressed[1])
                         {
                             sound.PlaySFX(&snd, 2, 0xA1BA);
-                            player2.SpawnEgg();
+                            player2.SpawnEgg(-2);
+                            player2.SpawnEgg(0);
+                            player2.SpawnEgg(2);
                             controller.cross_pressed[1] = true;
                         }
                     }
@@ -1521,10 +1615,10 @@ void GameEngine::GameLoop()
         }
     }
 
-    graph.nextpri = player.DrawEggs(graph.ot[graph.db], graph.nextpri, graph.ResW, graph.ResH);
-    graph.nextpri = player2.DrawEggs(graph.ot[graph.db], graph.nextpri, graph.ResW, graph.ResH);
+    graph.nextpri = player.DrawEggs(graph.ot[graph.db], graph.nextpri, OTLEN, graph.ResW, graph.ResH);
+    graph.nextpri = player2.DrawEggs(graph.ot[graph.db], graph.nextpri, OTLEN, graph.ResW, graph.ResH);
 
-    graph.nextpri = scrystal.DrawModel(graph.ot[graph.db],graph.nextpri, OTLEN);
+    graph.nextpri = scrystal.DrawModel(graph.ot[graph.db], graph.nextpri, OTLEN);
 
     if (player.x < 0)
     {
