@@ -164,11 +164,27 @@ void GameSound::PlayMusic()
     StartRCnt(RCntCNT1);
     musicEvent = OpenEvent(RCntCNT1, EvSpINT, EvMdINTR, GameSound::ProcessMusic);
     EnableEvent(musicEvent);
+
+    mus_playing = true;
+}
+
+void GameSound::ClearMusic()
+{
+    for (int i = 0; i < 12; i++)
+    {
+        curPos[i] = 0;
+        mus_tick[i] = 0;
+        chan_stop[i] = false;
+        chan_ofs[i] = 0;
+        chan_loop[i] = 0;
+        free(muser);
+        muser = nullptr;
+    }
 }
 
 void GameSound::StopMusic()
 {
-    if (muser)
+    if (mus_playing)
     {
         StopRCnt(RCntCNT1);
         DisableEvent(musicEvent);
@@ -178,14 +194,12 @@ void GameSound::StopMusic()
             StopSFX(i);
             curPos[i] = 0;
             mus_tick[i] = 0;
-            chan_ofs[i] = 0;
-            chan_start[i] = false;
-            chan_loop[i] = 0;
             chan_stop[i] = false;
             VSync(0);
         }
-        free(muser);
-        muser = nullptr;
+        mus_playing = false;
+        // free(muser);
+        // muser = nullptr;
     }
 }
 

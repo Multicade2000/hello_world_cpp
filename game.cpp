@@ -39,6 +39,7 @@ void GameEngine::GameResetGarbage()
 {
     cdrom.CDROM_XAStop();
     sound.StopMusic();
+    sound.ClearMusic();
     graph.ClearVRAM();
 
     scrystal.~SigmaCrystal();
@@ -138,6 +139,18 @@ void GameEngine::GameLoadStuff()
     {
         graph.LoadTexture(file);
 
+        free(file);
+    }
+
+    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
+    {
+        sound.LoadMusic(file, 16, 2);
+        free(file);
+    }
+
+    if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
+    {
+        memcard.PrepareHeader(file);
         free(file);
     }
 
@@ -259,13 +272,7 @@ void GameEngine::GameLoop()
                 if (!controller.mus_pressed[0])
                 {
                     sound.StopMusic();
-                    u_long *file;
-                    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
-                    {
-                        sound.LoadMusic(file, 16, 2);
-                        sound.PlayMusic();
-                        free(file);
-                    }
+                    sound.PlayMusic();
                     // cdrom.CDROM_Standby();
                     controller.mus_pressed[0] = true;
                 }
@@ -299,14 +306,6 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[0])
                 {
-                    u_long *file;
-
-                    if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
-                    {
-                        memcard.PrepareHeader(file);
-                        free(file);
-                    }
-
                     memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                     controller.save_pressed[0] = true;
                 }
@@ -454,13 +453,7 @@ void GameEngine::GameLoop()
                 if (!controller.mus_pressed[0])
                 {
                     sound.StopMusic();
-                    u_long *file;
-                    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
-                    {
-                        sound.LoadMusic(file, 16, 2);
-                        sound.PlayMusic();
-                        free(file);
-                    }
+                    sound.PlayMusic();
                     // cdrom.CDROM_Standby();
                     controller.mus_pressed[0] = true;
                 }
@@ -494,14 +487,6 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[0])
                 {
-                    u_long *file;
-
-                    if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
-                    {
-                        memcard.PrepareHeader(file);
-                        free(file);
-                    }
-
                     memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                     controller.save_pressed[0] = true;
                 }
@@ -620,13 +605,7 @@ void GameEngine::GameLoop()
                         if (!controller.mus_pressed[0])
                         {
                             sound.StopMusic();
-                            u_long *file;
-                            if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
-                            {
-                                sound.LoadMusic(file, 16, 2);
-                                sound.PlayMusic();
-                                free(file);
-                            }
+                            sound.PlayMusic();
                             // cdrom.CDROM_Standby();
                             controller.mus_pressed[0] = true;
                         }
@@ -660,14 +639,6 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[0])
                         {
-                            u_long *file;
-
-                            if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
-                            {
-                                memcard.PrepareHeader(file);
-                                free(file);
-                            }
-
                             memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                             controller.save_pressed[0] = true;
                         }
@@ -815,13 +786,7 @@ void GameEngine::GameLoop()
                         if (!controller.mus_pressed[0])
                         {
                             sound.StopMusic();
-                            u_long *file;
-                            if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
-                            {
-                                sound.LoadMusic(file, 16, 2);
-                                sound.PlayMusic();
-                                free(file);
-                            }
+                            sound.PlayMusic();
                             // cdrom.CDROM_Standby();
                             controller.mus_pressed[0] = true;
                         }
@@ -855,14 +820,6 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[0])
                         {
-                            u_long *file;
-
-                            if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
-                            {
-                                memcard.PrepareHeader(file);
-                                free(file);
-                            }
-
                             memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                             controller.save_pressed[0] = true;
                         }
@@ -982,13 +939,7 @@ void GameEngine::GameLoop()
                 if (!controller.mus_pressed[1])
                 {
                     sound.StopMusic();
-                    u_long *file;
-                    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
-                    {
-                        sound.LoadMusic(file, 16, 2);
-                        sound.PlayMusic();
-                        free(file);
-                    }
+                    sound.PlayMusic();
                     // cdrom.CDROM_Standby();
                     controller.mus_pressed[1] = true;
                 }
@@ -1022,14 +973,6 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[1])
                 {
-                    u_long *file;
-
-                    if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
-                    {
-                        memcard.PrepareHeader(file);
-                        free(file);
-                    }
-
                     memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                     controller.save_pressed[1] = true;
                 }
@@ -1177,13 +1120,7 @@ void GameEngine::GameLoop()
                 if (!controller.mus_pressed[1])
                 {
                     sound.StopMusic();
-                    u_long *file;
-                    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
-                    {
-                        sound.LoadMusic(file, 16, 2);
-                        sound.PlayMusic();
-                        free(file);
-                    }
+                    sound.PlayMusic();
                     // cdrom.CDROM_Standby();
                     controller.mus_pressed[1] = true;
                 }
@@ -1217,14 +1154,6 @@ void GameEngine::GameLoop()
             {
                 if (!controller.save_pressed[1])
                 {
-                    u_long *file;
-
-                    if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
-                    {
-                        memcard.PrepareHeader(file);
-                        free(file);
-                    }
-
                     memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                     controller.save_pressed[1] = true;
                 }
@@ -1343,13 +1272,7 @@ void GameEngine::GameLoop()
                         if (!controller.mus_pressed[1])
                         {
                             sound.StopMusic();
-                            u_long *file;
-                            if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
-                            {
-                                sound.LoadMusic(file, 16, 2);
-                                sound.PlayMusic();
-                                free(file);
-                            }
+                            sound.PlayMusic();
                             // cdrom.CDROM_Standby();
                             controller.mus_pressed[1] = true;
                         }
@@ -1383,14 +1306,6 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[1])
                         {
-                            u_long *file;
-
-                            if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
-                            {
-                                memcard.PrepareHeader(file);
-                                free(file);
-                            }
-
                             memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                             controller.save_pressed[1] = true;
                         }
@@ -1538,13 +1453,7 @@ void GameEngine::GameLoop()
                         if (!controller.mus_pressed[1])
                         {
                             sound.StopMusic();
-                            u_long *file;
-                            if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
-                            {
-                                sound.LoadMusic(file, 16, 2);
-                                sound.PlayMusic();
-                                free(file);
-                            }
+                            sound.PlayMusic();
                             // cdrom.CDROM_Standby();
                             controller.mus_pressed[1] = true;
                         }
@@ -1578,14 +1487,6 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.save_pressed[1])
                         {
-                            u_long *file;
-
-                            if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
-                            {
-                                memcard.PrepareHeader(file);
-                                free(file);
-                            }
-
                             memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                             controller.save_pressed[1] = true;
                         }
