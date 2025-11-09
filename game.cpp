@@ -326,11 +326,6 @@ void GameEngine::GameLoop()
             {
                 controller.save_pressed[0] = false;
             }
-
-            if (!(btn & PAD_L3) || !(btn & PAD_R3))
-            {
-                GameResetGarbage();
-            }
         }
         else if (controller.CheckType(0x00) == 0x7)
         {

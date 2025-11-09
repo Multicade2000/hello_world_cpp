@@ -18,6 +18,8 @@ void GameSave::MemCard_Init()
 
 void GameSave::PrepareHeader(u_long *icon_data)
 {
+    TIM_IMAGE *tim;
+
     mem_header.id[0] = 'S';
     mem_header.id[1] = 'C';
 
@@ -33,9 +35,10 @@ void GameSave::PrepareHeader(u_long *icon_data)
     mem_header.title[6] = 'P';
 
     OpenTIM(icon_data);
-    ReadTIM(icon);
+    ReadTIM(tim);
 
-    __builtin_memcpy(mem_header.clut, icon->caddr, 32);
+    __builtin_memcpy(mem_header.clut, tim->caddr, 32);
+    __builtin_memcpy(icon.sprt, tim->paddr, 128);
 }
 
 void GameSave::MemCard_Save(u_char port, int plr_x, int plr_y, int region)
@@ -90,7 +93,7 @@ void GameSave::MemCard_Save(u_char port, int plr_x, int plr_y, int region)
     MemCardWriteData((u_long *)&mem_header, 128 * 0, 128);
     MemCardSync(0, &cardCmd, &slotResult[0]);
 
-    MemCardWriteData((u_long *)icon->paddr, 128 * 1, 128);
+    MemCardWriteData((u_long *)&icon, 128 * 1, 128);
     MemCardSync(0, &cardCmd, &slotResult[0]);
 
     MemCardWriteData((u_long *)&dump_data, 128 * 2, 128);
