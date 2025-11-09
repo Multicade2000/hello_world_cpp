@@ -24,6 +24,10 @@ typedef struct {
 } SAVEHDR;
 
 typedef struct {
+    char sprt[128];
+} SAVEIMG;
+
+typedef struct {
     int data[32];
 } SAVEDATA;
 
@@ -39,7 +43,7 @@ public:
 
     SAVEHDR mem_header;
 
-    TIM_IMAGE *icon;
+    SAVEIMG icon;
 
     void MemCard_Init();
     void PrepareHeader(u_long *icon);
