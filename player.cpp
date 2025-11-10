@@ -85,11 +85,11 @@ char *Player::DrawSprite(u_long *ot, char *pri, int max_ot)
     
     if (!p2)
     {
-        setUV4(poly, 0, 0, 0, 64, 64, 0, 64, 64);
+        setUV4(poly, 0, 0, 0, 63, 63, 0, 63, 63);
     }
     else
     {
-        setUV4(poly, 64, 0, 64, 64, 128, 0, 128, 64);
+        setUV4(poly, 63, 0, 63, 63, 127, 0, 127, 63);
     }
 
     if ((OTz > 0) && (OTz < max_ot))

@@ -37,14 +37,7 @@ char *SigmaCrystal::DrawModel(u_long *ot, char *pri, int max_ot)
 
         SetPolyGT3(poly);
         poly->tpage = getTPage(0,0,576,0);
-        if (!laugh)
-        {
-            poly->clut = getClut(512,450);
-        }
-        else
-        {
-            poly->clut = getClut(512,452);
-        }
+        poly->clut = getClut(512,450);
         setRGB0(poly, 128, 128, 128);
         setRGB1(poly, 128, 128, 128);
         setRGB2(poly, 128, 128, 128);

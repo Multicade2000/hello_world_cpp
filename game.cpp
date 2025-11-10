@@ -41,6 +41,7 @@ void GameEngine::GameResetGarbage()
     sound.StopMusic();
     sound.ClearMusic();
     graph.ClearVRAM();
+    memcard.ClearHeader();
 
     scrystal.~SigmaCrystal();
     player.~Player();
@@ -76,6 +77,8 @@ void GameEngine::GameLoadStuff()
     cdrom.CDROM_PlayMovie("\\DATA\\MOV\\LOGO.STR;1", 240, (region.REGION_CODE == 0), true);
 
     graph.ClearVRAM();
+
+    InitHeap((u_long *)ramAddr, sizeof(ramAddr));
 
     u_long *file;
 
@@ -271,6 +274,10 @@ void GameEngine::GameLoop()
             {
                 if (!controller.mus_pressed[0])
                 {
+                    if (sound.mus_playing)
+                    {
+                        cdrom.CDROM_XAStop();
+                    }
                     sound.StopMusic();
                     sound.PlayMusic();
                     // cdrom.CDROM_Standby();
@@ -281,6 +288,10 @@ void GameEngine::GameLoop()
             {
                 if (!controller.mus_pressed[0])
                 {
+                    if (sound.mus_playing)
+                    {
+                        cdrom.CDROM_XAStop();
+                    }
                     sound.StopMusic();
                 }
             }
@@ -453,6 +464,10 @@ void GameEngine::GameLoop()
             {
                 if (!controller.mus_pressed[0])
                 {
+                    if (sound.mus_playing)
+                    {
+                        cdrom.CDROM_XAStop();
+                    }
                     sound.StopMusic();
                     sound.PlayMusic();
                     // cdrom.CDROM_Standby();
@@ -463,6 +478,10 @@ void GameEngine::GameLoop()
             {
                 if (!controller.mus_pressed[0])
                 {
+                    if (sound.mus_playing)
+                    {
+                        cdrom.CDROM_XAStop();
+                    }
                     sound.StopMusic();
                 }
             }
@@ -606,6 +625,10 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.mus_pressed[0])
                         {
+                            if (sound.mus_playing)
+                            {
+                                cdrom.CDROM_XAStop();
+                            }
                             sound.StopMusic();
                             sound.PlayMusic();
                             // cdrom.CDROM_Standby();
@@ -616,6 +639,10 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.mus_pressed[0])
                         {
+                            if (sound.mus_playing)
+                            {
+                                cdrom.CDROM_XAStop();
+                            }
                             sound.StopMusic();
                         }
                     }
@@ -788,6 +815,10 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.mus_pressed[0])
                         {
+                            if (sound.mus_playing)
+                            {
+                                cdrom.CDROM_XAStop();
+                            }
                             sound.StopMusic();
                             sound.PlayMusic();
                             // cdrom.CDROM_Standby();
@@ -798,6 +829,10 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.mus_pressed[0])
                         {
+                            if (sound.mus_playing)
+                            {
+                                cdrom.CDROM_XAStop();
+                            }
                             sound.StopMusic();
                         }
                     }
@@ -942,6 +977,10 @@ void GameEngine::GameLoop()
             {
                 if (!controller.mus_pressed[1])
                 {
+                    if (sound.mus_playing)
+                    {
+                        cdrom.CDROM_XAStop();
+                    }
                     sound.StopMusic();
                     sound.PlayMusic();
                     // cdrom.CDROM_Standby();
@@ -952,6 +991,10 @@ void GameEngine::GameLoop()
             {
                 if (!controller.mus_pressed[1])
                 {
+                    if (sound.mus_playing)
+                    {
+                        cdrom.CDROM_XAStop();
+                    }
                     sound.StopMusic();
                 }
             }
@@ -1124,6 +1167,10 @@ void GameEngine::GameLoop()
             {
                 if (!controller.mus_pressed[1])
                 {
+                    if (sound.mus_playing)
+                    {
+                        cdrom.CDROM_XAStop();
+                    }
                     sound.StopMusic();
                     sound.PlayMusic();
                     // cdrom.CDROM_Standby();
@@ -1134,6 +1181,10 @@ void GameEngine::GameLoop()
             {
                 if (!controller.mus_pressed[1])
                 {
+                    if (sound.mus_playing)
+                    {
+                        cdrom.CDROM_XAStop();
+                    }
                     sound.StopMusic();
                 }
             }
@@ -1277,6 +1328,10 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.mus_pressed[1])
                         {
+                            if (sound.mus_playing)
+                            {
+                                cdrom.CDROM_XAStop();
+                            }
                             sound.StopMusic();
                             sound.PlayMusic();
                             // cdrom.CDROM_Standby();
@@ -1287,6 +1342,10 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.mus_pressed[1])
                         {
+                            if (sound.mus_playing)
+                            {
+                                cdrom.CDROM_XAStop();
+                            }
                             sound.StopMusic();
                         }
                     }
@@ -1459,6 +1518,10 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.mus_pressed[1])
                         {
+                            if (sound.mus_playing)
+                            {
+                                cdrom.CDROM_XAStop();
+                            }
                             sound.StopMusic();
                             sound.PlayMusic();
                             // cdrom.CDROM_Standby();
@@ -1469,6 +1532,10 @@ void GameEngine::GameLoop()
                     {
                         if (!controller.mus_pressed[1])
                         {
+                            if (sound.mus_playing)
+                            {
+                                cdrom.CDROM_XAStop();
+                            }
                             sound.StopMusic();
                         }
                     }

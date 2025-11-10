@@ -16,6 +16,12 @@ void GameSave::MemCard_Init()
     MemCardStart();
 }
 
+void GameSave::ClearHeader()
+{
+    free(&icon);
+    free(&mem_header);
+}
+
 void GameSave::PrepareHeader(u_long *icon_data)
 {
     TIM_IMAGE *tim;
