@@ -153,7 +153,7 @@ void GameEngine::GameLoadStuff()
 
     if ((file = cdrom.CDROM_ReadFile("\\ICON.TIM;1")))
     {
-        memcard.PrepareHeader(file);
+        memcard.PrepareHeader(file, region.REGION_CODE);
         free(file);
     }
 

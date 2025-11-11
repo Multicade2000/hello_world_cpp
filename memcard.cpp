@@ -2,12 +2,10 @@
 
 GameSave::GameSave()
 {
-
 }
 
 GameSave::~GameSave()
 {
-
 }
 
 void GameSave::MemCard_Init()
@@ -22,7 +20,7 @@ void GameSave::ClearHeader()
     free(&mem_header);
 }
 
-void GameSave::PrepareHeader(u_long *icon_data)
+void GameSave::PrepareHeader(u_long *icon_data, int region)
 {
     TIM_IMAGE *tim;
 
@@ -32,13 +30,42 @@ void GameSave::PrepareHeader(u_long *icon_data)
     mem_header.type = 0x11;
     mem_header.size = 1;
 
-    mem_header.title[0] = 'H';
-    mem_header.title[1] = 'E';
-    mem_header.title[2] = 'L';
-    mem_header.title[3] = 'O';
-    mem_header.title[4] = 'C';
-    mem_header.title[5] = 'P';
-    mem_header.title[6] = 'P';
+    if (region == 0)
+    {
+        mem_header.title[0] = 'S';
+        mem_header.title[1] = 'A';
+        mem_header.title[2] = 'L';
+        mem_header.title[3] = 'U';
+        mem_header.title[4] = 'T';
+        mem_header.title[5] = 'C';
+        mem_header.title[6] = '+';
+        mem_header.title[7] = '+';
+    }
+    else if (region == 1)
+    {
+        mem_header.title[0] = 'H';
+        mem_header.title[1] = 'E';
+        mem_header.title[2] = 'L';
+        mem_header.title[3] = 'O';
+        mem_header.title[4] = 'C';
+        mem_header.title[5] = 'P';
+        mem_header.title[6] = 'P';
+    }
+    else if (region == 2)
+    {
+        mem_header.title[0] = 0x83;
+        mem_header.title[1] = 0x6E;
+        mem_header.title[2] = 0x83;
+        mem_header.title[3] = 0x8D;
+        mem_header.title[4] = 0x81;
+        mem_header.title[5] = 0x5B;
+        mem_header.title[6] = 0x82;
+        mem_header.title[7] = 0x62;
+        mem_header.title[8] = 0x81;
+        mem_header.title[9] = 0x7B;
+        mem_header.title[10] = 0x81;
+        mem_header.title[11] = 0x7B;
+    }
 
     OpenTIM(icon_data);
     ReadTIM(tim);

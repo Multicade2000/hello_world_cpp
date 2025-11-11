@@ -46,7 +46,7 @@ public:
     SAVEIMG icon;
 
     void MemCard_Init();
-    void PrepareHeader(u_long *icon);
+    void PrepareHeader(u_long *icon, int region);
     void ClearHeader();
     void MemCard_Save(u_char port, int plr_x, int plr_y, int region);
     SAVEDATA MemCard_Load(u_char port, int region);
