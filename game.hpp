@@ -7,6 +7,13 @@
 #include "player.hpp"
 #include "scrystal.hpp"
 
+typedef struct {
+    u_short r;
+    u_short g;
+    u_short b;
+    u_short stp;
+}CCLUT;
+
 class GameEngine
 {
 public:
@@ -14,6 +21,9 @@ public:
     ~GameEngine();
 
     TMD_PRIM *mdls;
+
+    CCLUT cclut;
+    int cclut_switch;
 
     GameRegion region;
     GameGraph graph;
@@ -24,6 +34,8 @@ public:
     Player player;
     Player player2;
     GameSave memcard;
+
+    u_short customClut[16];
 
     VAGsound snd;
 

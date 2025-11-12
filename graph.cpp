@@ -74,6 +74,8 @@ void GameGraph::LoadTexture(u_long *tim)
         LoadImage(tparam->crect, (u_long *)tparam->caddr);
         DrawSync(0);
     }
+
+    free(tparam);
 }
 
 void GameGraph::GraphDisp()
@@ -162,4 +164,11 @@ TMD_PRIM *GameGraph::LoadModel(u_long *mdl)
     }
 
     return dump;
+}
+
+void GameGraph::LoadCLUT(u_short *clut, short x, short y)
+{
+    RECT rect = {x,y,16,1};
+    LoadImage(&rect,(u_long *)clut);
+    DrawSync(0);
 }
