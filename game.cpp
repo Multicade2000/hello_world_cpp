@@ -16,6 +16,18 @@ GameEngine::GameEngine()
     player2.p2 = true;
     scrystal = SigmaCrystal();
     memcard = GameSave();
+
+    cclut.r = 31;
+    cclut.g = 0;
+    cclut.b = 0;
+    cclut.stp = 0;
+
+    cclut_switch = 0;
+
+    customClut[0] = (31 & 31) | ((0 & 31) << 5) | ((0 & 31) << 10) | (0 << 15);
+    customClut[1] = (15 & 31) | ((0 & 31) << 5) | ((0 & 31) << 10) | (0 << 15);
+    customClut[2] = (0 & 31) | ((0 & 31) << 5) | ((0 & 31) << 10) | (1 << 15);
+    customClut[3] = (31 & 31) | ((31 & 31) << 5) | ((31 & 31) << 10) | (0 << 15);
 }
 
 GameEngine::~GameEngine()
@@ -43,6 +55,12 @@ void GameEngine::GameResetGarbage()
     graph.ClearVRAM();
     memcard.ClearHeader();
 
+    ClearOTagR(graph.ot[0],OTLEN);
+    ClearOTagR(graph.ot[1],OTLEN);
+
+    graph.nextpri = graph.pribuff[0];
+    graph.db = 0;
+
     scrystal.~SigmaCrystal();
     player.~Player();
     player2.~Player();
@@ -56,6 +74,13 @@ void GameEngine::GameResetGarbage()
     player2 = Player();
     player2.p2 = true;
     scrystal = SigmaCrystal();
+
+    cclut.r = 31;
+    cclut.g = 0;
+    cclut.b = 0;
+    cclut.stp = 0;
+
+    cclut_switch = 0;
 
     SpuFree(snd.spu_address);
 
@@ -78,8 +103,6 @@ void GameEngine::GameLoadStuff()
 
     graph.ClearVRAM();
 
-    InitHeap((u_long *)ramAddr, sizeof(ramAddr));
-
     u_long *file;
 
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\SPRT\\BIRD.TIM;1")))
@@ -88,12 +111,15 @@ void GameEngine::GameLoadStuff()
 
         free(file);
     }
-    // else
-    // {
-    //     failed = true;
-    // }
     
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\SPRT\\EGG.TIM;1")))
+    {
+        graph.LoadTexture(file);
+
+        free(file);
+    }
+
+    if ((file = cdrom.CDROM_ReadFile("\\DATA\\BACK\\BACK.TIM;1")))
     {
         graph.LoadTexture(file);
 
@@ -121,13 +147,6 @@ void GameEngine::GameLoadStuff()
         free(file);
     }
 
-    if ((file = cdrom.CDROM_ReadFile("\\DATA\\MDL\\CRYSTAL2.TIM;1")))
-    {
-        graph.LoadTexture(file);
-
-        free(file);
-    }
-
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\MDL\\CRYSTAL.TMD;1")))
     {
         mdls = graph.LoadModel(file);
@@ -137,13 +156,6 @@ void GameEngine::GameLoadStuff()
 
     scrystal.mdl = mdls;
     scrystal.n_prim = sizeof(mdls) * 2;
-
-    if ((file = cdrom.CDROM_ReadFile("\\DATA\\BACK\\BACK.TIM;1")))
-    {
-        graph.LoadTexture(file);
-
-        free(file);
-    }
 
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\MUS\\MUSIC.MUS;1")))
     {
@@ -531,6 +543,7 @@ void GameEngine::GameLoop()
             if (!(btn & PAD_L3) || !(btn & PAD_R3))
             {
                 GameResetGarbage();
+                return;
             }
         }
         else if (controller.CheckType(0x00) == 0x8)
@@ -882,6 +895,7 @@ void GameEngine::GameLoop()
                     if (!(btn & PAD_L3) || !(btn & PAD_R3))
                     {
                         GameResetGarbage();
+                        return;
                     }
                 }
             }
@@ -1234,6 +1248,7 @@ void GameEngine::GameLoop()
             if (!(btn2 & PAD_L3) || !(btn2 & PAD_R3))
             {
                 GameResetGarbage();
+                return;
             }
         }
         else if (controller.CheckType(0x01) == 0x8)
@@ -1585,6 +1600,7 @@ void GameEngine::GameLoop()
                     if (!(btn2 & PAD_L3) || !(btn2 & PAD_R3))
                     {
                         GameResetGarbage();
+                        return;
                     }
                 }
             }
@@ -1594,6 +1610,165 @@ void GameEngine::GameLoop()
     graph.nextpri = player.DrawEggs(graph.ot[graph.db], graph.nextpri, OTLEN, graph.ResW, graph.ResH);
     graph.nextpri = player2.DrawEggs(graph.ot[graph.db], graph.nextpri, OTLEN, graph.ResW, graph.ResH);
 
+    if (cclut_switch == 0)
+    {
+        if (cclut.r < 31)
+        {
+            cclut.r++;
+        }
+
+        if (cclut.g > 0)
+        {
+            cclut.g--;
+        }
+        
+        if (cclut.b > 0)
+        {
+            cclut.b--;
+        }
+
+        if (cclut.r == 31 && cclut.g == 0 && cclut.b == 0)
+        {
+            cclut_switch = 1;
+        }
+    }
+    else if (cclut_switch == 1)
+    {
+        if (cclut.r > 0)
+        {
+            cclut.r--;
+        }
+        
+        if (cclut.g < 31)
+        {
+            cclut.g++;
+        }
+
+        if (cclut.b > 0)
+        {
+            cclut.b--;
+        }
+
+        if (cclut.r == 0 && cclut.g == 31 && cclut.b == 0)
+        {
+            cclut_switch = 2;
+        }
+    }
+    else if (cclut_switch == 2)
+    {
+        if (cclut.r > 0)
+        {
+            cclut.r--;
+        }
+        
+        if (cclut.g > 0)
+        {
+            cclut.g--;
+        }
+
+        if (cclut.b < 31)
+        {
+            cclut.b++;
+        }
+
+        if (cclut.r == 0 && cclut.g == 0 && cclut.b == 31)
+        {
+            cclut_switch = 3;
+        }
+    }
+    else if (cclut_switch == 3)
+    {
+        if (cclut.r < 31)
+        {
+            cclut.r++;
+        }
+        
+        if (cclut.g < 31)
+        {
+            cclut.g++;
+        }
+
+        if (cclut.b > 0)
+        {
+            cclut.b--;
+        }
+
+        if (cclut.r == 31 && cclut.g == 31 && cclut.b == 0)
+        {
+            cclut_switch = 4;
+        }
+    }
+    else if (cclut_switch == 4)
+    {
+        if (cclut.r < 31)
+        {
+            cclut.r++;
+        }
+        
+        if (cclut.g > 0)
+        {
+            cclut.g--;
+        }
+
+        if (cclut.b < 31)
+        {
+            cclut.b++;
+        }
+
+        if (cclut.r == 31 && cclut.g == 0 && cclut.b == 31)
+        {
+            cclut_switch = 5;
+        }
+    }
+    else if (cclut_switch == 5)
+    {
+        if (cclut.r > 0)
+        {
+            cclut.r--;
+        }
+        
+        if (cclut.g < 31)
+        {
+            cclut.g++;
+        }
+
+        if (cclut.b < 31)
+        {
+            cclut.b++;
+        }
+
+        if (cclut.r == 0 && cclut.g == 31 && cclut.b == 31)
+        {
+            cclut_switch = 6;
+        }
+    }
+    else if (cclut_switch == 6)
+    {
+        if (cclut.r < 31)
+        {
+            cclut.r++;
+        }
+        
+        if (cclut.g < 31)
+        {
+            cclut.g++;
+        }
+
+        if (cclut.b < 31)
+        {
+            cclut.b++;
+        }
+
+        if (cclut.r == 31 && cclut.g == 31 && cclut.b == 31)
+        {
+            cclut_switch = 0;
+        }
+    }
+
+    customClut[0] = (cclut.r & 31) | ((cclut.g & 31) << 5) | ((cclut.b & 31) << 10) | (cclut.stp << 15);
+    customClut[1] = ((cclut.r/2) & 31) | (((cclut.g/2) & 31) << 5) | (((cclut.b/2) & 31) << 10) | (cclut.stp << 15);
+
+    graph.LoadCLUT(customClut,512,450);
     graph.nextpri = scrystal.DrawModel(graph.ot[graph.db], graph.nextpri, OTLEN);
 
     if (player.x < 0)

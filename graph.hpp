@@ -29,6 +29,7 @@ public:
 
     void GraphInit();
     void LoadTexture(u_long *tim);
+    void LoadCLUT(u_short *clut, short x, short y);
     TMD_PRIM *LoadModel(u_long *mdl);
     void DrawBack();
     void GraphDisp();

@@ -72,6 +72,7 @@ char *Player::DrawSprite(u_long *ot, char *pri, int max_ot)
     setPolyFT4(poly);
 
     poly->tpage = getTPage(0,0,512,0);
+
     poly->clut = getClut(512,448);
 
     setRGB0(poly, 128, 128, 128);
