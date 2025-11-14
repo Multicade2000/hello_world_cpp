@@ -23,7 +23,7 @@ public:
     VECTOR  MovVector;
     VECTOR  ScaleVector;
     
-    SVECTOR VertPos[4];                                         
+    SVECTOR VertPos[4];
     MATRIX PolyMatrix;
 
     Egg *eggs;

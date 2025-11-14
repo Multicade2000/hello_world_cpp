@@ -92,8 +92,6 @@ void GameEngine::GameResetGarbage()
     SpuInitMalloc(MALLOC_MAX, sound.spu_malloc_rec);
     SpuWrite0(0xFFFF);
 
-    InitHeap((u_long *)ramAddr, sizeof(ramAddr));
-
     GameLoadStuff();
 }
 
