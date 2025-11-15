@@ -33,6 +33,8 @@ public:
     SigmaCrystal scrystal;
     Player player;
     Player player2;
+    Player player3;
+    Player player4;
     GameSave memcard;
 
     u_short customClut[16];

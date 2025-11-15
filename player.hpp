@@ -14,7 +14,7 @@ public:
     int x;
     int y;
 
-    bool p2;
+    char pidx;
 
     Player();
     ~Player();

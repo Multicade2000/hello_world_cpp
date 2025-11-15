@@ -271,7 +271,35 @@ u_char GameController::CheckStick(int port, int stick)
 
 void GameController::LoopVibrator(int port)
 {
-    int index = port == 0x10 ? 1 : 0;
+    int index = 0;
+
+    switch(port)
+    {
+        case 0x00:
+        {
+            index = 0;
+            break;
+        }
+        case 0x01:
+        {
+            index = 1;
+            break;
+        }
+        case 0x02:
+        {
+            index = 2;
+            break;
+        }
+        case 0x03:
+        {
+            index = 3;
+            break;
+        }
+        case 0x10:
+        {
+            index = 1;
+        }
+    }
 
     if (vib_sync[index])
     {

@@ -6,7 +6,7 @@ Player::Player()
     x = 48;
     y = 48;
 
-    p2 = false;
+    pidx = 0;
 
     RotVector = {0,0,0};
     MovVector = {0,0,256,0};
@@ -84,13 +84,21 @@ char *Player::DrawSprite(u_long *ot, char *pri, int max_ot)
 
     OTz /= 4;
     
-    if (!p2)
+    if (pidx == 0)
     {
         setUV4(poly, 0, 0, 0, 63, 63, 0, 63, 63);
     }
-    else
+    else if (pidx == 1)
     {
         setUV4(poly, 63, 0, 63, 63, 127, 0, 127, 63);
+    }
+    else if (pidx == 2)
+    {
+        setUV4(poly, 127, 0, 127, 63, 191, 0, 191, 63);
+    }
+    else if (pidx == 3)
+    {
+        setUV4(poly, 191, 0, 191, 63, 255, 0, 255, 63);
     }
 
     if ((OTz > 0) && (OTz < max_ot))

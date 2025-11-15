@@ -27,19 +27,19 @@ public:
 
     u_char padbuff[2][34];
     u_char align[6];
-    u_char motor[2][2];
+    u_char motor[4][2];
     u_short a, b, pad;
 
     GameController();
     ~GameController();
 
-    bool cross_pressed[2];
-    bool mus_pressed[2];
-    bool vib_pressed[2];
-    bool save_pressed[2];
-    bool xa_pressed[2];
+    bool cross_pressed[4];
+    bool mus_pressed[4];
+    bool vib_pressed[4];
+    bool save_pressed[4];
+    bool xa_pressed[4];
 
-    bool vib_sync[2];
+    bool vib_sync[4];
 
     void ControllerInit();
     int IsConnected(int port);
