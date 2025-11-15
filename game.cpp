@@ -32,7 +32,7 @@ GameEngine::GameEngine()
 
 GameEngine::~GameEngine()
 {
-
+    
 }
 
 void GameEngine::GameInit()
@@ -55,8 +55,8 @@ void GameEngine::GameResetGarbage()
     graph.ClearVRAM();
     memcard.ClearHeader();
 
-    ClearOTagR(graph.ot[0],OTLEN);
-    ClearOTagR(graph.ot[1],OTLEN);
+    ClearOTagR(graph.ot[0], OTLEN);
+    ClearOTagR(graph.ot[1], OTLEN);
 
     graph.nextpri = graph.pribuff[0];
     graph.db = 0;
@@ -92,6 +92,16 @@ void GameEngine::GameResetGarbage()
     SpuInitMalloc(MALLOC_MAX, sound.spu_malloc_rec);
     SpuWrite0(0xFFFF);
 
+    controller.motor[0][0] = 0;
+    controller.motor[0][1] = 0;
+    controller.vib_sync[0] = true;
+    controller.motor[1][0] = 0;
+    controller.motor[1][1] = 0;
+    controller.vib_sync[1] = true;
+
+    controller.LoopVibrator(0x00);
+    controller.LoopVibrator(0x10);
+
     GameLoadStuff();
 }
 
@@ -109,7 +119,7 @@ void GameEngine::GameLoadStuff()
 
         free(file);
     }
-    
+
     if ((file = cdrom.CDROM_ReadFile("\\DATA\\SPRT\\EGG.TIM;1")))
     {
         graph.LoadTexture(file);
@@ -328,6 +338,17 @@ void GameEngine::GameLoop()
                 if (!controller.save_pressed[0])
                 {
                     cdrom.CDROM_XAStop();
+
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 0;
+                    controller.vib_sync[0] = true;
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 0;
+                    controller.vib_sync[1] = true;
+
+                    controller.LoopVibrator(0x00);
+                    controller.LoopVibrator(0x10);
+
                     memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                     controller.save_pressed[0] = true;
                 }
@@ -337,6 +358,17 @@ void GameEngine::GameLoop()
                 if (!controller.save_pressed[0])
                 {
                     cdrom.CDROM_XAStop();
+
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 0;
+                    controller.vib_sync[0] = true;
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 0;
+                    controller.vib_sync[1] = true;
+
+                    controller.LoopVibrator(0x00);
+                    controller.LoopVibrator(0x10);
+
                     SAVEDATA data = memcard.MemCard_Load(0x00, region.REGION_CODE);
                     player.x = data.data[0];
                     player.y = data.data[1];
@@ -518,6 +550,17 @@ void GameEngine::GameLoop()
                 if (!controller.save_pressed[0])
                 {
                     cdrom.CDROM_XAStop();
+
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 0;
+                    controller.vib_sync[0] = true;
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 0;
+                    controller.vib_sync[1] = true;
+
+                    controller.LoopVibrator(0x00);
+                    controller.LoopVibrator(0x10);
+
                     memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                     controller.save_pressed[0] = true;
                 }
@@ -527,6 +570,17 @@ void GameEngine::GameLoop()
                 if (!controller.save_pressed[0])
                 {
                     cdrom.CDROM_XAStop();
+
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 0;
+                    controller.vib_sync[0] = true;
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 0;
+                    controller.vib_sync[1] = true;
+
+                    controller.LoopVibrator(0x00);
+                    controller.LoopVibrator(0x10);
+
                     SAVEDATA data = memcard.MemCard_Load(0x00, region.REGION_CODE);
                     player.x = data.data[0];
                     player.y = data.data[1];
@@ -680,6 +734,17 @@ void GameEngine::GameLoop()
                         if (!controller.save_pressed[0])
                         {
                             cdrom.CDROM_XAStop();
+
+                            controller.motor[0][0] = 0;
+                            controller.motor[0][1] = 0;
+                            controller.vib_sync[0] = true;
+                            controller.motor[1][0] = 0;
+                            controller.motor[1][1] = 0;
+                            controller.vib_sync[1] = true;
+
+                            controller.LoopVibrator(0x00);
+                            controller.LoopVibrator(0x10);
+
                             memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                             controller.save_pressed[0] = true;
                         }
@@ -689,6 +754,17 @@ void GameEngine::GameLoop()
                         if (!controller.save_pressed[0])
                         {
                             cdrom.CDROM_XAStop();
+
+                            controller.motor[0][0] = 0;
+                            controller.motor[0][1] = 0;
+                            controller.vib_sync[0] = true;
+                            controller.motor[1][0] = 0;
+                            controller.motor[1][1] = 0;
+                            controller.vib_sync[1] = true;
+
+                            controller.LoopVibrator(0x00);
+                            controller.LoopVibrator(0x10);
+
                             SAVEDATA data = memcard.MemCard_Load(0x00, region.REGION_CODE);
                             player.x = data.data[0];
                             player.y = data.data[1];
@@ -870,6 +946,17 @@ void GameEngine::GameLoop()
                         if (!controller.save_pressed[0])
                         {
                             cdrom.CDROM_XAStop();
+
+                            controller.motor[0][0] = 0;
+                            controller.motor[0][1] = 0;
+                            controller.vib_sync[0] = true;
+                            controller.motor[1][0] = 0;
+                            controller.motor[1][1] = 0;
+                            controller.vib_sync[1] = true;
+
+                            controller.LoopVibrator(0x00);
+                            controller.LoopVibrator(0x10);
+
                             memcard.MemCard_Save(0x00, player.x, player.y, region.REGION_CODE);
                             controller.save_pressed[0] = true;
                         }
@@ -879,6 +966,17 @@ void GameEngine::GameLoop()
                         if (!controller.save_pressed[0])
                         {
                             cdrom.CDROM_XAStop();
+
+                            controller.motor[0][0] = 0;
+                            controller.motor[0][1] = 0;
+                            controller.vib_sync[0] = true;
+                            controller.motor[1][0] = 0;
+                            controller.motor[1][1] = 0;
+                            controller.vib_sync[1] = true;
+
+                            controller.LoopVibrator(0x00);
+                            controller.LoopVibrator(0x10);
+
                             SAVEDATA data = memcard.MemCard_Load(0x00, region.REGION_CODE);
                             player.x = data.data[0];
                             player.y = data.data[1];
@@ -1033,6 +1131,17 @@ void GameEngine::GameLoop()
                 if (!controller.save_pressed[1])
                 {
                     cdrom.CDROM_XAStop();
+
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 0;
+                    controller.vib_sync[0] = true;
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 0;
+                    controller.vib_sync[1] = true;
+
+                    controller.LoopVibrator(0x00);
+                    controller.LoopVibrator(0x10);
+
                     memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                     controller.save_pressed[1] = true;
                 }
@@ -1042,6 +1151,17 @@ void GameEngine::GameLoop()
                 if (!controller.save_pressed[1])
                 {
                     cdrom.CDROM_XAStop();
+
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 0;
+                    controller.vib_sync[0] = true;
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 0;
+                    controller.vib_sync[1] = true;
+
+                    controller.LoopVibrator(0x00);
+                    controller.LoopVibrator(0x10);
+
                     SAVEDATA data = memcard.MemCard_Load(0x10, region.REGION_CODE);
                     player2.x = data.data[0];
                     player2.y = data.data[1];
@@ -1223,6 +1343,17 @@ void GameEngine::GameLoop()
                 if (!controller.save_pressed[1])
                 {
                     cdrom.CDROM_XAStop();
+
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 0;
+                    controller.vib_sync[0] = true;
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 0;
+                    controller.vib_sync[1] = true;
+
+                    controller.LoopVibrator(0x00);
+                    controller.LoopVibrator(0x10);
+
                     memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                     controller.save_pressed[1] = true;
                 }
@@ -1232,6 +1363,17 @@ void GameEngine::GameLoop()
                 if (!controller.save_pressed[1])
                 {
                     cdrom.CDROM_XAStop();
+
+                    controller.motor[0][0] = 0;
+                    controller.motor[0][1] = 0;
+                    controller.vib_sync[0] = true;
+                    controller.motor[1][0] = 0;
+                    controller.motor[1][1] = 0;
+                    controller.vib_sync[1] = true;
+
+                    controller.LoopVibrator(0x00);
+                    controller.LoopVibrator(0x10);
+
                     SAVEDATA data = memcard.MemCard_Load(0x10, region.REGION_CODE);
                     player2.x = data.data[0];
                     player2.y = data.data[1];
@@ -1385,6 +1527,17 @@ void GameEngine::GameLoop()
                         if (!controller.save_pressed[1])
                         {
                             cdrom.CDROM_XAStop();
+
+                            controller.motor[0][0] = 0;
+                            controller.motor[0][1] = 0;
+                            controller.vib_sync[0] = true;
+                            controller.motor[1][0] = 0;
+                            controller.motor[1][1] = 0;
+                            controller.vib_sync[1] = true;
+
+                            controller.LoopVibrator(0x00);
+                            controller.LoopVibrator(0x10);
+
                             memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                             controller.save_pressed[1] = true;
                         }
@@ -1394,6 +1547,17 @@ void GameEngine::GameLoop()
                         if (!controller.save_pressed[1])
                         {
                             cdrom.CDROM_XAStop();
+
+                            controller.motor[0][0] = 0;
+                            controller.motor[0][1] = 0;
+                            controller.vib_sync[0] = true;
+                            controller.motor[1][0] = 0;
+                            controller.motor[1][1] = 0;
+                            controller.vib_sync[1] = true;
+
+                            controller.LoopVibrator(0x00);
+                            controller.LoopVibrator(0x10);
+
                             SAVEDATA data = memcard.MemCard_Load(0x10, region.REGION_CODE);
                             player2.x = data.data[0];
                             player2.y = data.data[1];
@@ -1575,6 +1739,17 @@ void GameEngine::GameLoop()
                         if (!controller.save_pressed[1])
                         {
                             cdrom.CDROM_XAStop();
+
+                            controller.motor[0][0] = 0;
+                            controller.motor[0][1] = 0;
+                            controller.vib_sync[0] = true;
+                            controller.motor[1][0] = 0;
+                            controller.motor[1][1] = 0;
+                            controller.vib_sync[1] = true;
+
+                            controller.LoopVibrator(0x00);
+                            controller.LoopVibrator(0x10);
+
                             memcard.MemCard_Save(0x10, player2.x, player2.y, region.REGION_CODE);
                             controller.save_pressed[1] = true;
                         }
@@ -1584,6 +1759,17 @@ void GameEngine::GameLoop()
                         if (!controller.save_pressed[1])
                         {
                             cdrom.CDROM_XAStop();
+
+                            controller.motor[0][0] = 0;
+                            controller.motor[0][1] = 0;
+                            controller.vib_sync[0] = true;
+                            controller.motor[1][0] = 0;
+                            controller.motor[1][1] = 0;
+                            controller.vib_sync[1] = true;
+
+                            controller.LoopVibrator(0x00);
+                            controller.LoopVibrator(0x10);
+
                             SAVEDATA data = memcard.MemCard_Load(0x10, region.REGION_CODE);
                             player2.x = data.data[0];
                             player2.y = data.data[1];
@@ -1619,7 +1805,7 @@ void GameEngine::GameLoop()
         {
             cclut.g--;
         }
-        
+
         if (cclut.b > 0)
         {
             cclut.b--;
@@ -1636,7 +1822,7 @@ void GameEngine::GameLoop()
         {
             cclut.r--;
         }
-        
+
         if (cclut.g < 31)
         {
             cclut.g++;
@@ -1658,7 +1844,7 @@ void GameEngine::GameLoop()
         {
             cclut.r--;
         }
-        
+
         if (cclut.g > 0)
         {
             cclut.g--;
@@ -1680,7 +1866,7 @@ void GameEngine::GameLoop()
         {
             cclut.r++;
         }
-        
+
         if (cclut.g < 31)
         {
             cclut.g++;
@@ -1702,7 +1888,7 @@ void GameEngine::GameLoop()
         {
             cclut.r++;
         }
-        
+
         if (cclut.g > 0)
         {
             cclut.g--;
@@ -1724,7 +1910,7 @@ void GameEngine::GameLoop()
         {
             cclut.r--;
         }
-        
+
         if (cclut.g < 31)
         {
             cclut.g++;
@@ -1746,7 +1932,7 @@ void GameEngine::GameLoop()
         {
             cclut.r++;
         }
-        
+
         if (cclut.g < 31)
         {
             cclut.g++;
@@ -1764,9 +1950,9 @@ void GameEngine::GameLoop()
     }
 
     customClut[0] = (cclut.r & 31) | ((cclut.g & 31) << 5) | ((cclut.b & 31) << 10) | (cclut.stp << 15);
-    customClut[1] = ((cclut.r/2) & 31) | (((cclut.g/2) & 31) << 5) | (((cclut.b/2) & 31) << 10) | (cclut.stp << 15);
+    customClut[1] = ((cclut.r / 2) & 31) | (((cclut.g / 2) & 31) << 5) | (((cclut.b / 2) & 31) << 10) | (cclut.stp << 15);
 
-    graph.LoadCLUT(customClut,512,450);
+    graph.LoadCLUT(customClut, 512, 450);
     graph.nextpri = scrystal.DrawModel(graph.ot[graph.db], graph.nextpri, OTLEN);
 
     if (player.x < 0)
